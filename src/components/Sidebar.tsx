@@ -65,7 +65,7 @@ const navIcons: Record<NavIcon, ReactNode> = {
 
 export function Sidebar() {
   return (
-    <aside className="w-[248px] flex-none bg-[#FFFDF9] border-r border-[#ECE0D0] flex flex-col px-[16px] py-[24px] sticky top-0 h-screen">
+    <aside className="w-[248px] flex-none bg-[#FFFDF9] border-r border-[#ECE0D0] hidden md:flex md:flex-col px-[16px] py-[24px] sticky top-0 h-screen">
       <SidebarContent />
     </aside>
   );
