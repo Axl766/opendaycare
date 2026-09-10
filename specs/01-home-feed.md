@@ -1,6 +1,6 @@
 # SPEC 01 — Home feed: réplica visual de la referencia
 
-> **Estado:** Borrador
+> **Estado:** Approved
 > **Depende de:** ninguna (primer spec)
 > **Fecha:** 2026-09-10
 > **Objetivo:** Implementar la plantilla `src/references/pantallas/feed.dc.html` como home `/` con estilo idéntico en desktop (≥768px) y navegación móvil con top bar + drawer, sin autenticación ni base de datos.
