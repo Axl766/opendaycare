@@ -5,6 +5,17 @@
   --font-display: var(--font-fredoka);
 }
 
+@layer base {
+  html {
+    line-height: normal;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
 :root {
   color-scheme: light;
 }
@@ -13,11 +24,6 @@ body {
   font-family: var(--font-nunito), system-ui, sans-serif;
   background: #f6ecdf;
   color: #3f362e;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 ::-webkit-scrollbar {
