@@ -7,9 +7,9 @@ import { posts } from "@/data/feed";
 export default function Page() {
   return (
     <>
-      <MobileTopBar />
+      <MobileTopBar activeNavId="feed" />
       <div className="flex min-h-screen bg-[#F6ECDF]">
-        <Sidebar />
+        <Sidebar activeNavId="feed" />
         <main className="flex-1 min-w-0 md:h-screen md:overflow-y-auto">
           <div className="max-w-[760px] w-full mx-auto pt-[34px] px-[40px] pb-[80px]">
             <div className="mb-[24px]">

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { NavItemId } from "@/data/feed";
 import { SidebarContent } from "./Sidebar";
 
-export function MobileTopBar() {
+export function MobileTopBar({ activeNavId }: { activeNavId: NavItemId }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -61,7 +62,7 @@ export function MobileTopBar() {
             onClick={() => setDrawerOpen(false)}
           />
           <aside className="absolute inset-y-0 left-0 w-[248px] bg-[#FFFDF9] border-r border-[#ECE0D0] flex flex-col px-[16px] py-[24px]">
-            <SidebarContent />
+            <SidebarContent activeNavId={activeNavId} />
           </aside>
         </div>
       )}
