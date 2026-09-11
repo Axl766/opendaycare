@@ -80,7 +80,7 @@ export function Sidebar({ activeNavId }: { activeNavId: NavItemId }) {
 export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
   return (
     <>
-      <a
+      <Link
         href="#"
         className="flex items-center gap-[11px] pt-[4px] px-[8px] pb-[22px]"
       >
@@ -105,9 +105,9 @@ export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
           </div>
           <div className="text-[11.5px] text-[#A89A8B] mt-[2px]">Sala Soles</div>
         </div>
-      </a>
+      </Link>
 
-      <a
+      <Link
         href="#"
         className="flex items-center justify-center gap-[8px] w-full p-[12px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[14.5px] shadow-[0_8px_18px_-8px_rgba(238,129,100,.75)] mb-[18px]"
       >
@@ -124,31 +124,23 @@ export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
           <path d="M12 5v14M5 12h14" />
         </svg>
         Nueva publicación
-      </a>
+      </Link>
 
       <nav className="flex flex-col gap-[4px] flex-1">
-        {navItems.map((item) => {
-          const className = `flex items-center gap-[12px] px-[12px] py-[11px] rounded-[12px] text-[14.5px] ${
-            item.id === activeNavId
-              ? "bg-[#FBE3D8] text-[#D9583C] font-extrabold"
-              : "text-[#6E6359] font-semibold"
-          }`;
-          const content = (
-            <>
-              {navIcons[item.icon]}
-              {item.label}
-            </>
-          );
-          return item.href.startsWith("/") ? (
-            <Link key={item.id} href={item.href} className={className}>
-              {content}
-            </Link>
-          ) : (
-            <a key={item.id} href={item.href} className={className}>
-              {content}
-            </a>
-          );
-        })}
+        {navItems.map((item) => (
+          <Link
+            key={item.id}
+            href={item.href}
+            className={`flex items-center gap-[12px] px-[12px] py-[11px] rounded-[12px] text-[14.5px] ${
+              item.id === activeNavId
+                ? "bg-[#FBE3D8] text-[#D9583C] font-extrabold"
+                : "text-[#6E6359] font-semibold"
+            }`}
+          >
+            {navIcons[item.icon]}
+            {item.label}
+          </Link>
+        ))}
       </nav>
 
       <div className="border-t border-[#ECE0D0] pt-[14px] mt-[10px]">
@@ -162,7 +154,7 @@ export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
             </div>
             <div className="text-[12px] text-[#A89A8B]">{currentUser.role}</div>
           </div>
-          <a
+          <Link
             href="#"
             title="Cerrar sesión"
             className="shrink-0 w-[32px] h-[32px] rounded-[10px] bg-[#F6ECDF] text-[#94887B] flex items-center justify-center"
@@ -179,7 +171,7 @@ export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
             >
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </>

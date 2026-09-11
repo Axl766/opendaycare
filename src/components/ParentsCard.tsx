@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   parentRoleLabel,
   parentStatus,
@@ -38,7 +39,7 @@ export function ParentsCard({ parents }: { parents: LinkedParent[] }) {
             </div>
           );
         })}
-        <a href="#" className="flex items-center gap-[12px] pt-[8px]">
+        <Link href="#" className="flex items-center gap-[12px] pt-[8px]">
           <span className="w-[40px] h-[40px] rounded-full border-[1.5px] border-dashed border-[#D8CBBA] flex items-center justify-center text-[#B0A290] shrink-0">
             <svg
               width="18"
@@ -56,7 +57,7 @@ export function ParentsCard({ parents }: { parents: LinkedParent[] }) {
           <span className="font-extrabold text-[14.5px] text-[#C5503A]">
             Vincular otro padre
           </span>
-        </a>
+        </Link>
       </div>
     </div>
   );

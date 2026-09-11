@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Child } from "@/data/children";
 
 export function ChildProfileHeader({ child }: { child: Child }) {
@@ -17,12 +18,12 @@ export function ChildProfileHeader({ child }: { child: Child }) {
           {child.ageYears} años · Sala {child.room}
         </p>
       </div>
-      <a
+      <Link
         href="#"
         className="border-[1.5px] border-[#ECE0D0] bg-[#FFFDF9] text-[#6E6359] font-bold text-[14px] py-[9px] px-[16px] rounded-[12px]"
       >
         Editar
-      </a>
+      </Link>
     </div>
   );
 }

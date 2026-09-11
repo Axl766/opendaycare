@@ -69,7 +69,7 @@ export default async function Page({
               </div>
 
               <div className="w-full md:w-[300px] flex-none flex flex-col gap-[14px]">
-                <a
+                <Link
                   href="#"
                   className="flex items-center justify-center gap-[9px] w-full py-[13px] rounded-[14px] bg-[#3F362E] text-white font-extrabold text-[15px]"
                 >
@@ -87,7 +87,7 @@ export default async function Page({
                     <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
                   </svg>
                   Resumen del día
-                </a>
+                </Link>
                 <ParentsCard parents={child.parents} />
               </div>
             </div>

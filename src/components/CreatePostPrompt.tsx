@@ -1,8 +1,9 @@
+import Link from "next/link";
 import { currentUser } from "@/data/feed";
 
 export function CreatePostPrompt() {
   return (
-    <a
+    <Link
       href="#"
       className="flex items-center gap-[14px] bg-[#FFFDF9] border border-[#ECE0D0] rounded-[18px] px-[18px] py-[14px] mb-[24px] shadow-[0_4px_14px_-10px_rgba(120,90,60,.4)]"
     >
@@ -27,6 +28,6 @@ export function CreatePostPrompt() {
           <circle cx="12" cy="13" r="4" />
         </svg>
       </span>
-    </a>
+    </Link>
   );
 }
