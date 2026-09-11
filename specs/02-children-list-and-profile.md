@@ -1,6 +1,6 @@
 # SPEC 02 — Niños: listado y perfil (réplica visual)
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** SPEC 01 (sidebar, top bar, fuentes y base de estilo)
 > **Fecha:** 2026-09-10
 > **Objetivo:** Implementar las plantillas `ninos.dc.html` y `perfil-nino.dc.html` como `/kids` (listado con buscador funcional) y `/kids/[childId]` (perfil dinámico por niño), con navegación real entre pantallas existentes y la misma adaptación móvil del spec 01, sin autenticación ni base de datos.
@@ -33,43 +33,65 @@ export type ParentRole = "mom" | "dad";
 export type ParentStatus = "active" | "pending";
 
 export type LinkedParent = {
-  name: string;      // "Lucía Fernández"
-  initial: string;   // "L"
-  avatarBg: string;  // "#C9B6E8"
+  name: string; // "Lucía Fernández"
+  initial: string; // "L"
+  avatarBg: string; // "#C9B6E8"
   role: ParentRole;
   status: ParentStatus;
 };
 
 export type ChildAllergy = {
-  pill: string;   // "MANÍ" | "LACTOSA"
-  notes: string;  // texto de la tarjeta del perfil
+  pill: string; // "MANÍ" | "LACTOSA"
+  notes: string; // texto de la tarjeta del perfil
 };
 
 export type Child = {
-  id: string;          // slug de la URL: "mateo-fernandez"
-  name: string;        // "Mateo Fernández"
+  id: string; // slug de la URL: "mateo-fernandez"
+  name: string; // "Mateo Fernández"
   initial: string;
   avatarBg: string;
   avatarColor: string;
-  ageYears: number;    // 3
-  room: string;        // "Soles"
-  birthDate: string;   // "12 mar 2022"
-  enrollment: string;  // "feb 2025"
+  ageYears: number; // 3
+  room: string; // "Soles"
+  birthDate: string; // "12 mar 2022"
+  enrollment: string; // "feb 2025"
   allergy?: ChildAllergy;
   parents: LinkedParent[];
 };
 
-export const children: Child[] = [/* the 8 from the reference, in order */];
+export const children: Child[] = [
+  /* the 8 from the reference, in order */
+];
 
 // Visualization labels stay in Spanish
-export const parentRoleLabel: Record<ParentRole, string> = { mom: "Mamá", dad: "Papá" };
-
-export const parentStatus: Record<ParentStatus, { label: string; detail: string; bg: string; color: string }> = {
-  active: { label: "ACTIVA", detail: "activa", bg: "#CFEBD8", color: "#3E9B6C" },
-  pending: { label: "PENDIENTE", detail: "invitación enviada", bg: "#F7E7A6", color: "#9A7B1E" },
+export const parentRoleLabel: Record<ParentRole, string> = {
+  mom: "Mamá",
+  dad: "Papá",
 };
 
-export const unlinkedPill = { label: "VINCULAR", bg: "#F9D2DE", color: "#C56486" };
+export const parentStatus: Record<
+  ParentStatus,
+  { label: string; detail: string; bg: string; color: string }
+> = {
+  active: {
+    label: "ACTIVA",
+    detail: "activa",
+    bg: "#CFEBD8",
+    color: "#3E9B6C",
+  },
+  pending: {
+    label: "PENDIENTE",
+    detail: "invitación enviada",
+    bg: "#F7E7A6",
+    color: "#9A7B1E",
+  },
+};
+
+export const unlinkedPill = {
+  label: "VINCULAR",
+  bg: "#F9D2DE",
+  color: "#C56486",
+};
 export const allergyPillStyle = { bg: "#FBD8CC", color: "#D9684A" };
 ```
 
@@ -95,16 +117,16 @@ Refactor de navegación en `src/data/feed.ts`:
 
 ## Criterios de aceptación
 
-- [ ] `pnpm build` completa sin errores.
-- [ ] `/kids` y `/kids/mateo-fernandez` renderizan sin errores en consola.
-- [ ] En viewport ≥768px el listado es visualmente idéntico a `ninos.dc.html`: header GESTIÓN/Niños con "Agregar niño", buscador (borde #ECE0D0, radio 14px, placeholder "Buscar niño…"), divisor "SALA SOLES · 8 niños", grid de 2 columnas con gap 14px, tarjetas #FFFDF9 radio 18px con la sombra de la referencia y hover (borde #F2A78E, translateY -2px, transición .15s).
-- [ ] Los 8 niños se renderizan desde `children` con sus avatares/colores de la referencia; pills: MANÍ en Mateo, LACTOSA en Tomás, VINCULAR en Valentina y chevron en el resto.
-- [ ] El buscador filtra en cliente por nombre (p. ej. "mat" deja solo a Mateo) y al vaciar restaura los 8.
-- [ ] En viewport ≥768px el perfil de Mateo es visualmente idéntico a `perfil-nino.dc.html`: "Volver a Niños", avatar 84px #A9D9E8, tarjeta de alergias #FBDAD6 con el texto exacto, filas "12 mar 2022" / "Soles" / "feb 2025", botón "Resumen del día" #3F362E, padres Lucía (ACTIVA) y Diego (PENDIENTE) y "Vincular otro padre" con círculo punteado.
-- [ ] Cada tarjeta navega al perfil de ese niño con sus propios datos; un id desconocido devuelve 404.
-- [ ] Navegación del sidebar: "Feed" → `/` (activo en `/`), "Niños" → `/kids` (activo en `/kids` y en el perfil); "Nueva publicación", "Avisos", "Mi cuenta", "Editar", "Agregar niño", "Resumen del día", "Vincular otro padre" y cierre de sesión usan `href="#"` y no navegan.
-- [ ] En viewport <768px: sidebar oculto, top bar + drawer con "Niños" activo, grid a 1 columna y perfil apilado.
-- [ ] Todos los identificadores del código en inglés; los textos visibles en español.
+- [x] `pnpm build` completa sin errores.
+- [x] `/kids` y `/kids/mateo-fernandez` renderizan sin errores en consola.
+- [x] En viewport ≥768px el listado es visualmente idéntico a `ninos.dc.html`: header GESTIÓN/Niños con "Agregar niño", buscador (borde #ECE0D0, radio 14px, placeholder "Buscar niño…"), divisor "SALA SOLES · 8 niños", grid de 2 columnas con gap 14px, tarjetas #FFFDF9 radio 18px con la sombra de la referencia y hover (borde #F2A78E, translateY -2px, transición .15s).
+- [x] Los 8 niños se renderizan desde `children` con sus avatares/colores de la referencia; pills: MANÍ en Mateo, LACTOSA en Tomás, VINCULAR en Valentina y chevron en el resto.
+- [x] El buscador filtra en cliente por nombre (p. ej. "mat" deja solo a Mateo) y al vaciar restaura los 8.
+- [x] En viewport ≥768px el perfil de Mateo es visualmente idéntico a `perfil-nino.dc.html`: "Volver a Niños", avatar 84px #A9D9E8, tarjeta de alergias #FBDAD6 con el texto exacto, filas "12 mar 2022" / "Soles" / "feb 2025", botón "Resumen del día" #3F362E, padres Lucía (ACTIVA) y Diego (PENDIENTE) y "Vincular otro padre" con círculo punteado.
+- [x] Cada tarjeta navega al perfil de ese niño con sus propios datos; un id desconocido devuelve 404.
+- [x] Navegación del sidebar: "Feed" → `/` (activo en `/`), "Niños" → `/kids` (activo en `/kids` y en el perfil); "Nueva publicación", "Avisos", "Mi cuenta", "Editar", "Agregar niño", "Resumen del día", "Vincular otro padre" y cierre de sesión usan `href="#"` y no navegan.
+- [x] En viewport <768px: sidebar oculto, top bar + drawer con "Niños" activo, grid a 1 columna y perfil apilado.
+- [x] Todos los identificadores del código en inglés; los textos visibles en español.
 
 ## Decisiones
 
@@ -120,11 +142,11 @@ Refactor de navegación en `src/data/feed.ts`:
 
 ## Riesgos
 
-| Riesgo | Mitigación |
-| --- | --- |
-| Next.js 16 cambió APIs de rutas dinámicas (`params` asíncrono, `generateStaticParams`) | Leer `node_modules/next/dist/docs/` antes de escribir código (paso 1). |
-| Traducir estilos inline a Tailwind puede desviar el visual | Capturas comparativas contra ambas referencias en `.playwright-mcp/` (paso final). |
-| Datos inventados para 7 niños (solo Mateo tiene referencia) | Fijar los conteos de padres y pills que sí define la referencia; el resto sigue sus convenciones. |
+| Riesgo                                                                                 | Mitigación                                                                                        |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Next.js 16 cambió APIs de rutas dinámicas (`params` asíncrono, `generateStaticParams`) | Leer `node_modules/next/dist/docs/` antes de escribir código (paso 1).                            |
+| Traducir estilos inline a Tailwind puede desviar el visual                             | Capturas comparativas contra ambas referencias en `.playwright-mcp/` (paso final).                |
+| Datos inventados para 7 niños (solo Mateo tiene referencia)                            | Fijar los conteos de padres y pills que sí define la referencia; el resto sigue sus convenciones. |
 
 ## Lo que **no** está en este spec
 
