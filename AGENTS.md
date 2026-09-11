@@ -12,3 +12,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Playwright : screenshots y cualquier cosa relacionada a playwright tiene que estar en la carpeta .playwright-mcp.
 - Context7 utilizaremos este MCP para usar la documentación mas actualizada
+
+## Agentes
+
+- `spec-verify` : verifica los criterios de aceptación de un spec (estado "Approved"), revisa la implementación, corrige lo que falle y marca los checkboxes del spec. Usa Playwright MCP para la verificación visual con capturas comparativas (guardadas en `.playwright-mcp/`) y corre `pnpm build`.
+
+## Comandos
+
+- Verificar un spec : `@spec-verify @specs/NN-slug.md` — lanza el agente `spec-verify` vía Task tool con un prompt detallado que incluye: ruta del spec, archivos de implementación esperados, criterios de aceptación, workflow de verificación (build, dev server, capturas desktop/mobile, naming inglés/español) y la instrucción de marcar los checkboxes que pasen y devolver un reporte PASS/FAIL por criterio.

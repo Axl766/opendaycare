@@ -1,6 +1,6 @@
 # SPEC 01 — Home feed: réplica visual de la referencia
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** ninguna (primer spec)
 > **Fecha:** 2026-09-10
 > **Objetivo:** Implementar la plantilla `src/references/pantallas/feed.dc.html` como home `/` con estilo idéntico en desktop (≥768px) y navegación móvil con top bar + drawer, sin autenticación ni base de datos.
@@ -85,16 +85,16 @@ No hay persistencia: todo vive en memoria al momento del render.
 
 ## Criterios de aceptación
 
-- [ ] `pnpm build` completa sin errores.
-- [ ] `/` renderiza el feed completo sin errores en consola.
-- [ ] En viewport ≥768px el diseño es visualmente idéntico a `feed.dc.html`: sidebar de 248px con fondo #FFFDF9, fondo de página #F6ECDF, tarjetas #FFFDF9 con borde #ECE0D0 y radio 20px, sombras y tipografías Fredoka/Nunito.
-- [ ] Los 3 posts se renderizan desde el array `posts` con badges LOGRO, ACTIVIDAD y ANUNCIO, y contadores 3/1, 5/2 y 8/0 respectivamente.
-- [ ] El placeholder punteado de foto aparece solo en el post de actividad con el texto "Foto · pintando con témperas".
-- [ ] Fredoka y Nunito cargan vía `next/font` (self-hosted, sin `<link>` a Google Fonts).
-- [ ] Todos los enlaces a pantallas inexistentes usan `href="#"` y no navegan.
-- [ ] En viewport <768px el sidebar fijo no es visible; la top bar con logo y hamburguesa sí; el drawer abre/cierra y contiene el mismo contenido del sidebar.
-- [ ] Con `prefers-color-scheme: dark` activo, la página mantiene el tema claro de la referencia.
-- [ ] Todos los identificadores del código (variables, funciones, tipos, propiedades, discriminantes) están en inglés; los textos visibles (badges, navegación, saludo, contenido de los posts) quedan en español.
+- [x] `pnpm build` completa sin errores.
+- [x] `/` renderiza el feed completo sin errores en consola.
+- [x] En viewport ≥768px el diseño es visualmente idéntico a `feed.dc.html`: sidebar de 248px con fondo #FFFDF9, fondo de página #F6ECDF, tarjetas #FFFDF9 con borde #ECE0D0 y radio 20px, sombras y tipografías Fredoka/Nunito.
+- [x] Los 3 posts se renderizan desde el array `posts` con badges LOGRO, ACTIVIDAD y ANUNCIO, y contadores 3/1, 5/2 y 8/0 respectivamente.
+- [x] El placeholder punteado de foto aparece solo en el post de actividad con el texto "Foto · pintando con témperas".
+- [x] Fredoka y Nunito cargan vía `next/font` (self-hosted, sin `<link>` a Google Fonts).
+- [x] Todos los enlaces a pantallas inexistentes usan `href="#"` y no navegan.
+- [x] En viewport <768px el sidebar fijo no es visible; la top bar con logo y hamburguesa sí; el drawer abre/cierra y contiene el mismo contenido del sidebar.
+- [x] Con `prefers-color-scheme: dark` activo, la página mantiene el tema claro de la referencia.
+- [x] Todos los identificadores del código (variables, funciones, tipos, propiedades, discriminantes) están en inglés; los textos visibles (badges, navegación, saludo, contenido de los posts) quedan en español.
 
 ## Decisiones
 
