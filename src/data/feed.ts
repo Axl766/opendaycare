@@ -76,19 +76,20 @@ export const currentUser = {
 
 export type NavIcon = "home" | "kids" | "bell" | "user";
 
+export type NavItemId = "feed" | "kids" | "notices" | "account";
+
 export type NavItem = {
-  id: string;
+  id: NavItemId;
   label: string;
   href: string;
   icon: NavIcon;
-  active: boolean;
 };
 
 export const navItems: NavItem[] = [
-  { id: "feed", label: "Feed", href: "#", icon: "home", active: true },
-  { id: "kids", label: "Niños", href: "#", icon: "kids", active: false },
-  { id: "notices", label: "Avisos", href: "#", icon: "bell", active: false },
-  { id: "account", label: "Mi cuenta", href: "#", icon: "user", active: false },
+  { id: "feed", label: "Feed", href: "/", icon: "home" },
+  { id: "kids", label: "Niños", href: "/kids", icon: "kids" },
+  { id: "notices", label: "Avisos", href: "#", icon: "bell" },
+  { id: "account", label: "Mi cuenta", href: "#", icon: "user" },
 ];
 
 export const badgeByType: Record<

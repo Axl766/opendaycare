@@ -1,5 +1,11 @@
 import type { ReactNode } from "react";
-import { currentUser, navItems, type NavIcon } from "@/data/feed";
+import Link from "next/link";
+import {
+  currentUser,
+  navItems,
+  type NavIcon,
+  type NavItemId,
+} from "@/data/feed";
 
 const navIcons: Record<NavIcon, ReactNode> = {
   home: (
@@ -63,15 +69,15 @@ const navIcons: Record<NavIcon, ReactNode> = {
   ),
 };
 
-export function Sidebar() {
+export function Sidebar({ activeNavId }: { activeNavId: NavItemId }) {
   return (
     <aside className="w-[248px] flex-none bg-[#FFFDF9] border-r border-[#ECE0D0] hidden md:flex md:flex-col px-[16px] py-[24px] sticky top-0 h-screen">
-      <SidebarContent />
+      <SidebarContent activeNavId={activeNavId} />
     </aside>
   );
 }
 
-export function SidebarContent() {
+export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
   return (
     <>
       <a
@@ -121,20 +127,28 @@ export function SidebarContent() {
       </a>
 
       <nav className="flex flex-col gap-[4px] flex-1">
-        {navItems.map((item) => (
-          <a
-            key={item.id}
-            href={item.href}
-            className={`flex items-center gap-[12px] px-[12px] py-[11px] rounded-[12px] text-[14.5px] ${
-              item.active
-                ? "bg-[#FBE3D8] text-[#D9583C] font-extrabold"
-                : "text-[#6E6359] font-semibold"
-            }`}
-          >
-            {navIcons[item.icon]}
-            {item.label}
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const className = `flex items-center gap-[12px] px-[12px] py-[11px] rounded-[12px] text-[14.5px] ${
+            item.id === activeNavId
+              ? "bg-[#FBE3D8] text-[#D9583C] font-extrabold"
+              : "text-[#6E6359] font-semibold"
+          }`;
+          const content = (
+            <>
+              {navIcons[item.icon]}
+              {item.label}
+            </>
+          );
+          return item.href.startsWith("/") ? (
+            <Link key={item.id} href={item.href} className={className}>
+              {content}
+            </Link>
+          ) : (
+            <a key={item.id} href={item.href} className={className}>
+              {content}
+            </a>
+          );
+        })}
       </nav>
 
       <div className="border-t border-[#ECE0D0] pt-[14px] mt-[10px]">
