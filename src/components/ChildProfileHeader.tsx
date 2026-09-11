@@ -9,7 +9,7 @@ export function ChildProfileHeader({ child }: { child: Child }) {
       >
         {child.initial}
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <h1 className="font-display font-semibold text-[28px] text-[#3F362E]">
           {child.name}
         </h1>

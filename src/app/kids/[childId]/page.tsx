@@ -61,7 +61,7 @@ export default async function Page({
               Volver a Niños
             </Link>
 
-            <div className="flex flex-col md:flex-row items-start gap-[26px]">
+            <div className="flex flex-col md:flex-row md:items-start gap-[26px]">
               <div className="flex-1 min-w-0 md:min-w-[300px] flex flex-col gap-[18px]">
                 <ChildProfileHeader child={child} />
                 {child.allergy && <AllergyNotice allergy={child.allergy} />}
