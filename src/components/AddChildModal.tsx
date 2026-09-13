@@ -4,7 +4,7 @@ import {
   useEffect,
   useRef,
   useState,
-  type KeyboardEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { rooms } from "@/data/children";
 
@@ -14,9 +14,16 @@ export function AddChildModal() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const cardRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function closeModal() {
+    setOpen(false);
+    setDropdownOpen(false);
+    setSelectedRoom("Soles");
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -28,10 +35,29 @@ export function AddChildModal() {
         !dropdownRef.current.contains(target)
       ) {
         setDropdownOpen(false);
+        return;
+      }
+      if (cardRef.current && !cardRef.current.contains(target)) {
+        closeModal();
       }
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open, dropdownOpen]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        if (dropdownOpen) {
+          setDropdownOpen(false);
+        } else {
+          closeModal();
+        }
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, dropdownOpen]);
 
   useEffect(() => {
@@ -55,7 +81,7 @@ export function AddChildModal() {
     triggerRef.current?.focus();
   }
 
-  function handleListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  function handleListKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       const delta = event.key === "ArrowDown" ? 1 : -1;
@@ -98,6 +124,7 @@ export function AddChildModal() {
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-[16px] md:p-[40px]">
               <div
+                ref={cardRef}
                 role="dialog"
                 aria-modal="true"
                 aria-label="Agregar niño"
@@ -106,6 +133,7 @@ export function AddChildModal() {
                 <div className="flex items-center justify-between px-[26px] py-[20px] border-b border-[#ECE0D0]">
                   <button
                     type="button"
+                    onClick={closeModal}
                     className="text-[#94887B] font-bold text-[15px]"
                   >
                     Cancelar
@@ -115,6 +143,7 @@ export function AddChildModal() {
                   </span>
                   <button
                     type="button"
+                    onClick={closeModal}
                     className="text-[#D9583C] font-extrabold text-[15px]"
                   >
                     Guardar
