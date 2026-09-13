@@ -1,6 +1,6 @@
 # SPEC 03 — Login y activación de cuenta (réplica visual)
 
-> **Estado:** Draft
+> **Estado:** approved
 > **Depende de:** SPEC 01 (fuentes, base de estilo), SPEC 02 (refactor de navegación del sidebar)
 > **Fecha:** 2026-09-12
 > **Objetivo:** Implementar `login.dc.html` y `activar-cuenta.dc.html` como `/login` y `/activate-account` dentro del route group `(auth)`, sin el selector de rol "Personal/Familia", con checkbox de autorización toggléable y navegación real entre pantallas existentes, sin autenticación ni base de datos.
@@ -105,10 +105,10 @@ No hay persistencia ni estado global; el único estado interactivo (`ConsentChec
 
 ## Riesgos
 
-| Riesgo                                                                   | Mitigación                                                                                          |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| Next.js 16 cambió el comportamiento de route groups y layouts            | Leer `node_modules/next/dist/docs/` antes de escribir código (paso 1).                              |
-| Gradientes, círculos absolutos y letter-spacing pueden desviar el visual | Capturas comparativas contra ambas referencias en `.playwright-mcp/` (paso final).                  |
+| Riesgo                                                                   | Mitigación                                                                                            |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| Next.js 16 cambió el comportamiento de route groups y layouts            | Leer `node_modules/next/dist/docs/` antes de escribir código (paso 1).                                |
+| Gradientes, círculos absolutos y letter-spacing pueden desviar el visual | Capturas comparativas contra ambas referencias en `.playwright-mcp/` (paso final).                    |
 | El checkbox desmarcado no existe en la referencia (estilo inventado)     | Reutilizar el lenguaje visual de los inputs (blanco + borde #EADFD0, radio 8px); decisión registrada. |
 
 ## Lo que **no** está en este spec
