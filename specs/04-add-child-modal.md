@@ -1,6 +1,6 @@
 # SPEC 04 — Modal Agregar niño (réplica visual)
 
-> **Estado:** approved
+> **Estado:** implemented
 > **Depende de:** SPEC 02 (pantalla /kids, header con botón "Agregar niño", datos de niños)
 > **Fecha:** 2026-09-12
 > **Objetivo:** Implementar el modal de `agregar-nino.dc.html` lanzado por el botón "Agregar niño" de `/kids`, como réplica visual sobre overlay centrado con cierre por Cancelar/Guardar/clic-fuera/Esc y dropdown de sala funcional, sin persistencia ni cambios en los niños existentes.
@@ -48,15 +48,15 @@ No hay nuevos tipos ni persistencia; los estados del modal (abierto, sala selecc
 
 ## Criterios de aceptación
 
-- [ ] `pnpm build` completa sin errores.
-- [ ] El botón "Agregar niño" de `/kids` abre el modal sin errores en consola; `/` y `/kids/[childId]` quedan intactos.
-- [ ] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `agregar-nino.dc.html`: max-width 520px, bg `#FBF4EC`, borde `#ECE0D0`, radio 24px, sombra de la referencia, header Cancelar/"Agregar niño"/Guardar y los 5 campos con labels e inputs de la referencia y sus placeholders exactos.
-- [ ] El modal se presenta sobre overlay `rgba(63,54,46,.4)` centrado en el viewport (desviación registrada: la referencia es una página suelta sin overlay).
-- [ ] "Cancelar" y "Guardar" cierran el modal y dejan la lista de `/kids` con los 8 niños de siempre (sin cambios).
-- [ ] El clic en el overlay y la tecla Esc también cierran el modal.
-- [ ] El dropdown de SALA abre al clic, lista "Soles", "Lunas" y "Estrellas" con "Soles" inicial, la selección queda visible en el trigger, se cierra con clic-fuera o Esc (sin cerrar el modal) y las flechas + Enter/Space seleccionan.
-- [ ] En viewport <768px el modal abre igual: tarjeta centrada, sin desbordes horizontales, campos y dropdown usables.
-- [ ] Todos los identificadores del código en inglés; los textos visibles en español.
+- [x] `pnpm build` completa sin errores.
+- [x] El botón "Agregar niño" de `/kids` abre el modal sin errores en consola; `/` y `/kids/[childId]` quedan intactos.
+- [x] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `agregar-nino.dc.html`: max-width 520px, bg `#FBF4EC`, borde `#ECE0D0`, radio 24px, sombra de la referencia, header Cancelar/"Agregar niño"/Guardar y los 5 campos con labels e inputs de la referencia y sus placeholders exactos.
+- [x] El modal se presenta sobre overlay `rgba(63,54,46,.4)` centrado en el viewport (desviación registrada: la referencia es una página suelta sin overlay).
+- [x] "Cancelar" y "Guardar" cierran el modal y dejan la lista de `/kids` con los 8 niños de siempre (sin cambios).
+- [x] El clic en el overlay y la tecla Esc también cierran el modal.
+- [x] El dropdown de SALA abre al clic, lista "Soles", "Lunas" y "Estrellas" con "Soles" inicial, la selección queda visible en el trigger, se cierra con clic-fuera o Esc (sin cerrar el modal) y las flechas + Enter/Space seleccionan.
+- [x] En viewport <768px el modal abre igual: tarjeta centrada, sin desbordes horizontales, campos y dropdown usables.
+- [x] Todos los identificadores del código en inglés; los textos visibles en español.
 
 ## Decisiones
 
