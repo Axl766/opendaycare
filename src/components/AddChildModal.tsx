@@ -1,9 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
+import { rooms } from "@/data/children";
 
 export function AddChildModal() {
   const [open, setOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState("Soles");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(event: PointerEvent) {
+      const target = event.target as Node;
+      if (
+        dropdownOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open, dropdownOpen]);
+
+  useEffect(() => {
+    if (dropdownOpen) {
+      optionRefs.current[activeIndex]?.focus();
+    }
+  }, [dropdownOpen, activeIndex]);
+
+  function toggleDropdown() {
+    if (dropdownOpen) {
+      setDropdownOpen(false);
+    } else {
+      setActiveIndex(Math.max(0, rooms.indexOf(selectedRoom)));
+      setDropdownOpen(true);
+    }
+  }
+
+  function selectRoom(room: string) {
+    setSelectedRoom(room);
+    setDropdownOpen(false);
+    triggerRef.current?.focus();
+  }
+
+  function handleListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const delta = event.key === "ArrowDown" ? 1 : -1;
+      const next = (activeIndex + delta + rooms.length) % rooms.length;
+      setActiveIndex(next);
+      optionRefs.current[next]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      setDropdownOpen(false);
+      triggerRef.current?.focus();
+    }
+  }
 
   return (
     <>
@@ -83,28 +148,64 @@ export function AddChildModal() {
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[8px]">
+                      <div className="text-[12px] font-extrabold tracking-[.7px] text-[#3F362E] mb-[8px]">
                         SALA
                       </div>
-                      <button
-                        type="button"
-                        className="flex items-center gap-[8px] w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] font-bold"
-                      >
-                        Soles
-                        <span className="flex-1" />
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="#B0A290"
-                          strokeWidth="2.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                      <div ref={dropdownRef} className="relative">
+                        <button
+                          type="button"
+                          ref={triggerRef}
+                          aria-haspopup="listbox"
+                          aria-expanded={dropdownOpen}
+                          onClick={toggleDropdown}
+                          className="flex items-center gap-[8px] w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] font-bold"
                         >
-                          <path d="m6 9 6 6 6-6" />
-                        </svg>
-                      </button>
+                          {selectedRoom}
+                          <span className="flex-1" />
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#B0A290"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="m6 9 6 6 6-6" />
+                          </svg>
+                        </button>
+                        {dropdownOpen && (
+                          <div
+                            role="listbox"
+                            aria-label="Sala"
+                            onKeyDown={handleListKeyDown}
+                            className="absolute top-[calc(100%+6px)] left-0 right-0 z-10 bg-white border-[1.5px] border-[#EADFD0] rounded-[14px] py-[6px] shadow-[0_14px_30px_-12px_rgba(63,54,46,.3)]"
+                          >
+                            {rooms.map((room, index) => (
+                              <button
+                                key={room}
+                                type="button"
+                                role="option"
+                                aria-selected={room === selectedRoom}
+                                ref={(element) => {
+                                  optionRefs.current[index] = element;
+                                }}
+                                onClick={() => selectRoom(room)}
+                                className={`w-full text-left px-[16px] py-[10px] text-[15px] ${
+                                  room === selectedRoom
+                                    ? "text-[#D9583C] font-bold"
+                                    : "text-[#3F362E]"
+                                } ${
+                                  index === activeIndex ? "bg-[#FBE3D8]" : ""
+                                }`}
+                              >
+                                {room}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
