@@ -234,3 +234,5 @@ export const parentStatus: Record<
 export const unlinkedPill = { label: "VINCULAR", bg: "#F9D2DE", color: "#C56486" };
 
 export const allergyPillStyle = { bg: "#FBD8CC", color: "#D9684A" };
+
+export const rooms: string[] = ["Soles", "Lunas", "Estrellas"];
