@@ -1,6 +1,6 @@
 # SPEC 04 — Modal Agregar niño (réplica visual)
 
-> **Estado:** implemented
+> **Estado:** approved
 > **Depende de:** SPEC 02 (pantalla /kids, header con botón "Agregar niño", datos de niños)
 > **Fecha:** 2026-09-12
 > **Objetivo:** Implementar el modal de `agregar-nino.dc.html` lanzado por el botón "Agregar niño" de `/kids`, como réplica visual sobre overlay centrado con cierre por Cancelar/Guardar/clic-fuera/Esc y dropdown de sala funcional, sin persistencia ni cambios en los niños existentes.

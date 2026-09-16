@@ -14,13 +14,10 @@ export function AddChildModal() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [form, setForm] = useState({ name: "", birthDate: "" });
-  const [errors, setErrors] = useState({ name: "", birthDate: "" });
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const birthDateInputRef = useRef<HTMLInputElement | null>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   function closeModal() {
@@ -28,70 +25,17 @@ export function AddChildModal() {
     setDropdownOpen(false);
     setSelectedRoom("Soles");
     setForm({ name: "", birthDate: "" });
-    setErrors({ name: "", birthDate: "" });
   }
 
   function handleNameChange(value: string) {
     setForm((prev) => ({ ...prev, name: value }));
-    setErrors((prev) => ({ ...prev, name: "" }));
   }
 
   function handleBirthDateChange(value: string) {
     setForm((prev) => ({ ...prev, birthDate: value }));
-    setErrors((prev) => ({ ...prev, birthDate: "" }));
-  }
-
-  function validateBirthDate(value: string): string {
-    const invalidDateMessage = "Ingresa una fecha válida en formato dd/mm/aaaa";
-    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-      return invalidDateMessage;
-    }
-    const [dayText, monthText, yearText] = value.split("/");
-    const day = Number(dayText);
-    const month = Number(monthText);
-    const year = Number(yearText);
-    const isLeapYear =
-      (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-    const daysInMonth = [
-      31,
-      isLeapYear ? 29 : 28,
-      31,
-      30,
-      31,
-      30,
-      31,
-      31,
-      30,
-      31,
-      30,
-      31,
-    ];
-    if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month - 1]) {
-      return invalidDateMessage;
-    }
-    const birthDate = new Date(year, month - 1, day);
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    if (birthDate.getTime() > today.getTime()) {
-      return "La fecha no puede ser posterior a hoy";
-    }
-    return "";
   }
 
   function handleSave() {
-    const nextErrors = {
-      name: form.name.trim() ? "" : "El nombre es obligatorio",
-      birthDate: validateBirthDate(form.birthDate),
-    };
-    setErrors(nextErrors);
-    if (nextErrors.name) {
-      nameInputRef.current?.focus();
-      return;
-    }
-    if (nextErrors.birthDate) {
-      birthDateInputRef.current?.focus();
-      return;
-    }
     closeModal();
   }
 
@@ -228,27 +172,11 @@ export function AddChildModal() {
                   </label>
                   <input
                     id="child-name"
-                    ref={nameInputRef}
                     placeholder="Ej. Martina López"
                     value={form.name}
                     onChange={(event) => handleNameChange(event.target.value)}
-                    aria-invalid={Boolean(errors.name)}
-                    aria-describedby={errors.name ? "child-name-error" : undefined}
-                    className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
-                      errors.name
-                        ? "border-[#D9583C] mb-[8px]"
-                        : "border-[#EADFD0] mb-[18px]"
-                    }`}
+                    className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none mb-[18px]"
                   />
-                  {errors.name && (
-                    <p
-                      id="child-name-error"
-                      role="alert"
-                      className="text-[12px] font-bold text-[#D9583C] mb-[18px]"
-                    >
-                      {errors.name}
-                    </p>
-                  )}
 
                   <div className="flex gap-[14px] mb-[18px]">
                     <div className="flex-1">
@@ -260,32 +188,14 @@ export function AddChildModal() {
                       </label>
                       <input
                         id="child-birth-date"
-                        ref={birthDateInputRef}
                         placeholder="dd/mm/aaaa"
                         inputMode="numeric"
                         value={form.birthDate}
                         onChange={(event) =>
                           handleBirthDateChange(event.target.value)
                         }
-                        aria-invalid={Boolean(errors.birthDate)}
-                        aria-describedby={
-                          errors.birthDate ? "child-birth-date-error" : undefined
-                        }
-                        className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
-                          errors.birthDate
-                            ? "border-[#D9583C]"
-                            : "border-[#EADFD0]"
-                        }`}
+                        className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none"
                       />
-                      {errors.birthDate && (
-                        <p
-                          id="child-birth-date-error"
-                          role="alert"
-                          className="text-[12px] font-bold text-[#D9583C] mt-[8px]"
-                        >
-                          {errors.birthDate}
-                        </p>
-                      )}
                     </div>
                     <div className="flex-1">
                       <div className="text-[12px] font-extrabold tracking-[.7px] text-[#3F362E] mb-[8px]">
