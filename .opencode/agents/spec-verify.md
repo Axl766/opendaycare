@@ -5,18 +5,7 @@ model: opencode-go/qwen3.6-plus
 temperature: 0.1
 permission:
   edit: allow
-  bash:
-    "*": ask
-    "pnpm build*": allow
-    "pnpm dev*": allow
-    "python -m http.server*": allow
-    "npx tsc*": allow
-    "npx eslint*": allow
-    "curl*": allow
-    "netstat*": allow
-    "taskkill*": allow
-    "mv*": allow
-    "mkdir*": allow
+  bash: allow
   "playwright_*": allow
   "context7_*": allow
   webfetch: allow
