@@ -24,8 +24,11 @@ export function LinkParentModal({
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "" });
   const [relationship, setRelationship] = useState<ParentRole>("mom");
+  const [errors, setErrors] = useState({ name: "", email: "" });
 
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
 
   const childFirstName = childName.split(" ")[0];
 
@@ -33,17 +36,44 @@ export function LinkParentModal({
     setOpen(false);
     setForm({ name: "", email: "" });
     setRelationship("mom");
+    setErrors({ name: "", email: "" });
   }
 
   function handleNameChange(value: string) {
     setForm((prev) => ({ ...prev, name: value }));
+    setErrors((prev) => ({ ...prev, name: "" }));
   }
 
   function handleEmailChange(value: string) {
     setForm((prev) => ({ ...prev, email: value }));
+    setErrors((prev) => ({ ...prev, email: "" }));
   }
 
   function handleInvite() {
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const nextErrors = {
+      name: name ? "" : "Ingresá el nombre del padre o madre.",
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        ? ""
+        : "Ingresá un correo válido.",
+    };
+    setErrors(nextErrors);
+    if (nextErrors.name) {
+      nameInputRef.current?.focus();
+      return;
+    }
+    if (nextErrors.email) {
+      emailInputRef.current?.focus();
+      return;
+    }
+    onInvite({
+      name,
+      initial: name.charAt(0).toUpperCase(),
+      avatarBg: "#A9C7E8",
+      role: relationship,
+      status: "pending",
+    });
     closeModal();
   }
 
@@ -166,11 +196,29 @@ export function LinkParentModal({
                   </label>
                   <input
                     id="parent-name"
+                    ref={nameInputRef}
                     placeholder="Ej. Diego Fernández"
                     value={form.name}
                     onChange={(event) => handleNameChange(event.target.value)}
-                    className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none mb-[18px]"
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={
+                      errors.name ? "parent-name-error" : undefined
+                    }
+                    className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
+                      errors.name
+                        ? "border-[#D9583C] mb-[8px]"
+                        : "border-[#EADFD0] mb-[18px]"
+                    }`}
                   />
+                  {errors.name && (
+                    <p
+                      id="parent-name-error"
+                      role="alert"
+                      className="text-[12px] font-bold text-[#D9583C] mb-[18px]"
+                    >
+                      {errors.name}
+                    </p>
+                  )}
 
                   <label
                     htmlFor="parent-email"
@@ -180,12 +228,30 @@ export function LinkParentModal({
                   </label>
                   <input
                     id="parent-email"
+                    ref={emailInputRef}
                     type="email"
                     placeholder="correo@ejemplo.com"
                     value={form.email}
                     onChange={(event) => handleEmailChange(event.target.value)}
-                    className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none mb-[18px]"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={
+                      errors.email ? "parent-email-error" : undefined
+                    }
+                    className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
+                      errors.email
+                        ? "border-[#D9583C] mb-[8px]"
+                        : "border-[#EADFD0] mb-[18px]"
+                    }`}
                   />
+                  {errors.email && (
+                    <p
+                      id="parent-email-error"
+                      role="alert"
+                      className="text-[12px] font-bold text-[#D9583C] mb-[18px]"
+                    >
+                      {errors.email}
+                    </p>
+                  )}
 
                   <div className="text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[10px]">
                     PARENTESCO
