@@ -1,4 +1,11 @@
-export type PostType = "achievement" | "activity" | "announcement";
+export type PostType =
+  | "meal"
+  | "nap"
+  | "activity"
+  | "achievement"
+  | "mood"
+  | "photo"
+  | "announcement";
 
 export type PostAuthor =
   | {
@@ -13,13 +20,33 @@ export type PostAuthor =
 export type Post = {
   id: string;
   author: PostAuthor;
-  time: string;
-  type: PostType;
-  recipient: string;
-  body: string;
-  photo?: { label: string };
+  time: string;              // "14:20"
+  type: PostType;            // defines the badge
+  recipient: string;         // "familia de Mateo" | "toda la sala"
+  body: string;              // post text (Spanish)
+  photo?: { label: string }; // dashed placeholder, only in "activity"
   likes: number;
   comments: number;
+};
+
+export const postTypeLabel: Record<PostType, string> = {
+  meal: "Comida",
+  nap: "Siesta",
+  activity: "Actividad",
+  achievement: "Logro",
+  mood: "Ánimo",
+  photo: "Foto",
+  announcement: "Anuncio",
+};
+
+export const postTypePill: Record<PostType, { bg: string; color: string }> = {
+  meal: { bg: "#9A7B1E", color: "#FFFFFF" },
+  nap: { bg: "#E7DCF6", color: "#7B5FC0" },
+  activity: { bg: "#2E89A6", color: "#FFFFFF" },
+  achievement: { bg: "#CFEBD8", color: "#3E9B6C" },
+  mood: { bg: "#F9D2DE", color: "#C56486" },
+  photo: { bg: "#FBD8CC", color: "#D9684A" },
+  announcement: { bg: "#CCD8F4", color: "#4E72C8" },
 };
 
 export const posts: Post[] = [
@@ -96,7 +123,11 @@ export const badgeByType: Record<
   PostType,
   { label: string; bg: string; color: string }
 > = {
-  achievement: { label: "LOGRO", bg: "#CFEBD8", color: "#3E9B6C" },
+  meal: { label: "COMIDA", bg: "#F4DC8E", color: "#9A7B1E" },
+  nap: { label: "SIESTA", bg: "#E7DCF6", color: "#7B5FC0" },
   activity: { label: "ACTIVIDAD", bg: "#C7E7F1", color: "#2E89A6" },
+  achievement: { label: "LOGRO", bg: "#CFEBD8", color: "#3E9B6C" },
+  mood: { label: "ÁNIMO", bg: "#F9D2DE", color: "#C56486" },
+  photo: { label: "FOTO", bg: "#FBD8CC", color: "#D9684A" },
   announcement: { label: "ANUNCIO", bg: "#CCD8F4", color: "#4E72C8" },
 };
