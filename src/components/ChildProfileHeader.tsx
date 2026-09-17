@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { Child } from "@/data/children";
+import Link from "next/link";
 
 export function ChildProfileHeader({ child }: { child: Child }) {
   return (
@@ -11,7 +11,7 @@ export function ChildProfileHeader({ child }: { child: Child }) {
         {child.initial}
       </div>
       <div className="flex-1 min-w-0">
-        <h1 className="font-display font-semibold text-[28px] text-[#3F362E]">
+        <h1 className="font-display font-semibold text-2xl text-[#3F362E]">
           {child.name}
         </h1>
         <p className="mt-[3px] text-[#94887B] text-[15px]">
