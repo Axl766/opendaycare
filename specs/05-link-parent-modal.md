@@ -1,6 +1,6 @@
 # SPEC 05 — Modal Vincular padre (réplica visual con validación)
 
-> **Estado:** Approved
+> **Estado:** Implemented
 > **Depende de:** SPEC 02 (perfil del niño, tarjeta PADRES VINCULADOS, modelo de padres)
 > **Fecha:** 2026-09-16
 > **Objetivo:** Implementar el modal de `vincular-padre.dc.html` lanzado por "Vincular otro padre" del perfil de cada niño (`/kids/[childId]`), con réplica visual, parentesco funcional de 3 opciones, validación de nombre y email al enviar, y alta del padre como PENDIENTE en memoria (sin persistencia).
@@ -70,18 +70,18 @@ Código "7K4P9" y textos del modal como constantes locales de `LinkParentModal`;
 
 ## Criterios de aceptación
 
-- [ ] `pnpm build` completa sin errores.
-- [ ] "Vincular otro padre" del perfil abre el modal sin errores en consola; `/`, `/kids` y los demás perfiles quedan intactos.
-- [ ] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `vincular-padre.dc.html`: max-width 480px, header "Vincular padre" + subtítulo "a {nombre del niño}", callout azul, NOMBRE/EMAIL con sus placeholders, PARENTESCO con "Mamá" seleccionada, bloque de código "7K4P9" con "Vence en 7 días" y CTA coral.
-- [ ] El modal se presenta sobre overlay `rgba(63,54,46,.4)` centrado en el viewport (desviación registrada: la referencia es una página suelta sin overlay).
-- [ ] PARENTESCO: al clic se selecciona una única opción y queda visible el estilo seleccionado; inicia "Mamá".
-- [ ] El modal cierra por X, clic en el overlay y tecla Esc, y reabre con campos vacíos, "Mamá" y sin errores.
-- [ ] Enviar con nombre vacío muestra borde `#D9583C` + "Ingresá el nombre del padre o madre."; con email inválido, "Ingresá un correo válido."; el error de un campo desaparece al editarlo; con errores no se cierra ni agrega nada.
-- [ ] Un envío válido cierra el modal y el padre aparece en PADRES VINCULADOS con pill PENDIENTE, avatar `#A9C7E8` con su inicial y "{parentesco} · invitación enviada" (incluye "Tutor/a").
-- [ ] Recargar la página restaura los padres originales del niño (sin persistencia).
-- [ ] Subtítulo y callout usan los datos del niño del perfil (p. ej. "a Sofía Méndez" / "Solo verá el feed de Sofía").
-- [ ] En viewport <768px el modal abre centrado, sin desbordes horizontales, con campos y pills de parentesco usables.
-- [ ] Todos los identificadores del código en inglés; los textos visibles en español.
+- [x] `pnpm build` completa sin errores.
+- [x] "Vincular otro padre" del perfil abre el modal sin errores en consola; `/`, `/kids` y los demás perfiles quedan intactos.
+- [x] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `vincular-padre.dc.html`: max-width 480px, header "Vincular padre" + subtítulo "a {nombre del niño}", callout azul, NOMBRE/EMAIL con sus placeholders, PARENTESCO con "Mamá" seleccionada, bloque de código "7K4P9" con "Vence en 7 días" y CTA coral.
+- [x] El modal se presenta sobre overlay `rgba(63,54,46,.4)` centrado en el viewport (desviación registrada: la referencia es una página suelta sin overlay).
+- [x] PARENTESCO: al clic se selecciona una única opción y queda visible el estilo seleccionado; inicia "Mamá".
+- [x] El modal cierra por X, clic en el overlay y tecla Esc, y reabre con campos vacíos, "Mamá" y sin errores.
+- [x] Enviar con nombre vacío muestra borde `#D9583C` + "Ingresá el nombre del padre o madre."; con email inválido, "Ingresá un correo válido."; el error de un campo desaparece al editarlo; con errores no se cierra ni agrega nada.
+- [x] Un envío válido cierra el modal y el padre aparece en PADRES VINCULADOS con pill PENDIENTE, avatar `#A9C7E8` con su inicial y "{parentesco} · invitación enviada" (incluye "Tutor/a").
+- [x] Recargar la página restaura los padres originales del niño (sin persistencia).
+- [x] Subtítulo y callout usan los datos del niño del perfil (p. ej. "a Sofía Méndez" / "Solo verá el feed de Sofía").
+- [x] En viewport <768px el modal abre centrado, sin desbordes horizontales, con campos y pills de parentesco usables.
+- [x] Todos los identificadores del código en inglés; los textos visibles en español.
 
 ## Decisiones
 
