@@ -88,7 +88,7 @@ export default async function Page({
                   </svg>
                   Resumen del día
                 </Link>
-                <ParentsCard parents={child.parents} />
+                <ParentsCard parents={child.parents} childName={child.name} />
               </div>
             </div>
           </div>
