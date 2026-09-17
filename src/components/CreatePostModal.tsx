@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useFeed } from "@/components/FeedProvider";
 import { children } from "@/data/children";
-import { postTypeLabel, postTypePill, type PostType } from "@/data/feed";
+import {
+  postTypeLabel,
+  postTypePill,
+  type Post,
+  type PostType,
+} from "@/data/feed";
 
 const postTypes: PostType[] = [
   "meal",
@@ -14,7 +20,20 @@ const postTypes: PostType[] = [
   "announcement",
 ];
 
+function formatRecipient(firstNames: string[]): string {
+  if (firstNames.length === 1) {
+    return `familia de ${firstNames[0]}`;
+  }
+  if (firstNames.length === 2) {
+    return `familia de ${firstNames[0]} y ${firstNames[1]}`;
+  }
+  const allButLast = firstNames.slice(0, -1).join(", ");
+  const last = firstNames[firstNames.length - 1];
+  return `familia de ${allButLast} y ${last}`;
+}
+
 export function CreatePostModal() {
+  const { addPost } = useFeed();
   const [open, setOpen] = useState(false);
   const [selectedChildren, setSelectedChildren] = useState<Set<string>>(
     new Set(),
@@ -102,6 +121,48 @@ export function CreatePostModal() {
       return;
     }
 
+    const selectedTypeValue = selectedType as PostType;
+    const time = new Date().toLocaleTimeString("es-AR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    let author: Post["author"];
+    let recipient: string;
+
+    if (roomSelected) {
+      author = { kind: "announcement" };
+      recipient = "toda la sala";
+    } else {
+      const selectedKids = children.filter((child) =>
+        selectedChildren.has(child.id),
+      );
+      const firstChild = selectedKids[0];
+      const firstNames = selectedKids.map((child) => child.name.split(" ")[0]);
+
+      author = {
+        kind: "child",
+        name: firstChild.name.split(" ")[0],
+        initial: firstChild.initial,
+        avatarBg: firstChild.avatarBg,
+        avatarColor: firstChild.avatarColor,
+      };
+      recipient = formatRecipient(firstNames);
+    }
+
+    const newPost: Post = {
+      id: `post-${Date.now()}`,
+      author,
+      time,
+      type: selectedTypeValue,
+      recipient,
+      body: description.trim(),
+      likes: 0,
+      comments: 0,
+    };
+
+    addPost(newPost);
     closeModal();
   }
 
