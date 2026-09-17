@@ -1,8 +1,7 @@
 import { CreatePostPrompt } from "@/components/CreatePostPrompt";
+import { FeedPosts } from "@/components/FeedPosts";
 import { MobileTopBar } from "@/components/MobileTopBar";
-import { PostCard } from "@/components/PostCard";
 import { Sidebar } from "@/components/Sidebar";
-import { posts } from "@/data/feed";
 
 export default function Page() {
   return (
@@ -33,11 +32,7 @@ export default function Page() {
               <span className="flex-1 h-px bg-[#E7DAC8]" />
             </div>
 
-            <div className="flex flex-col gap-[16px]">
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
+            <FeedPosts />
           </div>
         </main>
       </div>
