@@ -1,4 +1,4 @@
-export type ParentRole = "mom" | "dad";
+export type ParentRole = "mom" | "dad" | "tutor";
 
 export type ParentStatus = "active" | "pending";
 
@@ -211,6 +211,7 @@ export const children: Child[] = [
 export const parentRoleLabel: Record<ParentRole, string> = {
   mom: "Mamá",
   dad: "Papá",
+  tutor: "Tutor/a",
 };
 
 export const parentStatus: Record<
