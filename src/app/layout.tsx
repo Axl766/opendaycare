@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
+import { FeedProvider } from "@/components/FeedProvider";
 import "./globals.css";
 
 const fredoka = Fredoka({
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${fredoka.variable} ${nunito.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        <FeedProvider>{children}</FeedProvider>
+      </body>
     </html>
   );
 }
