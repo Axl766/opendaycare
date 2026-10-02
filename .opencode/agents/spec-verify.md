@@ -1,7 +1,7 @@
 ---
 description: Verifies the acceptance criteria of a spec (specs/NN-slug.md). Reviews the implementation, fixes what fails, and marks the spec's checks. Uses Context7 for Next.js best practices and Playwright MCP for screen verification with visual screenshot comparison. Invoke as @spec-verify <spec-name>.
 mode: subagent
-model: opencode-go/qwen3.6-plus
+model: opencode-go/glm-5.3-flash
 temperature: 0.1
 permission:
   edit: allow

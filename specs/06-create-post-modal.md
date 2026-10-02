@@ -97,19 +97,19 @@ const newPost: Post = {
 
 ## Criterios de aceptación
 
-- [ ] `pnpm build` completa sin errores.
-- [ ] El botón "Nueva publicación" del sidebar (desktop) y del drawer (móvil) abre el modal; `/`, `/kids` y `/kids/[childId]` siguen funcionando; el prompt "Compartí un momento…" queda estático.
-- [ ] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `crear-publicacion.dc.html`: max-width 580px, bg `#FBF4EC`, borde `#ECE0D0`, radio 24px, sombra de la referencia, header Cancelar/"Nueva publicación"/Publicar y las 4 secciones con sus placeholders y tiles exactos.
-- [ ] PARA muestra los 8 niños de sala Soles con sus avatares + "Toda la sala"; inicia vacío; se seleccionan varios niños; "Toda la sala" desmarca a los niños y viceversa; el chip seleccionado usa borde/bg `#3F362E` con texto blanco.
-- [ ] TIPO muestra los 7 tipos con sus colores fijos; selección única; el elegido agrega borde 1.5px `#3F362E`.
-- [ ] "Agregar" de FOTOS añade tiles placeholder de 96px, sin subida real de archivos.
-- [ ] Publicar con faltantes muestra el mensaje `#D9583C` bajo el bloque correspondiente ("Elegí al menos un destinatario." / "Elegí un tipo de publicación." / "Ingresá una descripción.") y no cierra ni publica; cada error desaparece al cambiar ese campo.
-- [ ] Publicar válido cierra el modal y el post aparece como primera tarjeta del feed: badge del tipo elegido (COMIDA/SIESTA/ACTIVIDAD/LOGRO/ÁNIMO/FOTO/ANUNCIO), autor = primer niño seleccionado (o megáfono "Anuncio general" con "Toda la sala"), "Para: familia de {nombres}" o "toda la sala", hora actual HH:MM, 0 me gusta y 0 comentarios, sin foto.
-- [ ] Lo publicado desde `/kids` o el perfil aparece en el feed al navegar a `/` en la misma sesión (sin recargar).
-- [ ] Recargar la página restaura los 3 posts originales.
-- [ ] Al reabrir, el modal está vacío (sin destinatario, sin tipo, textarea vacía, sin tiles agregados, sin errores).
-- [ ] En viewport <768px el modal abre centrado sobre el drawer, sin desbordes horizontales, con chips y pills usables.
-- [ ] Todos los identificadores del código en inglés; los textos visibles en español.
+- [x] `pnpm build` completa sin errores.
+- [x] El botón "Nueva publicación" del sidebar (desktop) y del drawer (móvil) abre el modal; `/`, `/kids` y `/kids/[childId]` siguen funcionando; el prompt "Compartí un momento…" queda estático.
+- [x] En viewport ≥768px el modal abierto es visualmente idéntico a la tarjeta de `crear-publicacion.dc.html`: max-width 580px, bg `#FBF4EC`, borde `#ECE0D0`, radio 24px, sombra de la referencia, header Cancelar/"Nueva publicación"/Publicar y las 4 secciones con sus placeholders y tiles exactos.
+- [x] PARA muestra los 8 niños de sala Soles con sus avatares + "Toda la sala"; inicia vacío; se seleccionan varios niños; "Toda la sala" desmarca a los niños y viceversa; el chip seleccionado usa borde/bg `#3F362E` con texto blanco.
+- [x] TIPO muestra los 7 tipos con sus colores fijos; selección única; el elegido agrega borde 1.5px `#3F362E`.
+- [x] "Agregar" de FOTOS añade tiles placeholder de 96px, sin subida real de archivos.
+- [x] Publicar con faltantes muestra el mensaje `#D9583C` bajo el bloque correspondiente ("Elegí al menos un destinatario." / "Elegí un tipo de publicación." / "Ingresá una descripción.") y no cierra ni publica; cada error desaparece al cambiar ese campo.
+- [x] Publicar válido cierra el modal y el post aparece como primera tarjeta del feed: badge del tipo elegido (COMIDA/SIESTA/ACTIVIDAD/LOGRO/ÁNIMO/FOTO/ANUNCIO), autor = primer niño seleccionado (o megáfono "Anuncio general" con "Toda la sala"), "Para: familia de {nombres}" o "toda la sala", hora actual HH:MM, 0 me gusta y 0 comentarios, sin foto.
+- [x] Lo publicado desde `/kids` o el perfil aparece en el feed al navegar a `/` en la misma sesión (sin recargar).
+- [x] Recargar la página restaura los 3 posts originales.
+- [x] Al reabrir, el modal está vacío (sin destinatario, sin tipo, textarea vacía, sin tiles agregados, sin errores).
+- [x] En viewport <768px el modal abre centrado sobre el drawer, sin desbordes horizontales, con chips y pills usables.
+- [x] Todos los identificadores del código en inglés; los textos visibles en español.
 
 ## Decisiones
 
