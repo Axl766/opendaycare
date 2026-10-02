@@ -12,6 +12,17 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Playwright : screenshots y cualquier cosa relacionada a playwright tiene que estar en la carpeta .playwright-mcp.
 - Context7 utilizaremos este MCP para usar la documentación mas actualizada
+- Supabase : base de datos, RLS, Edge Functions, logs, advisors y cualquier operación contra la base de datos del proyecto.
+
+## Skills
+
+- `supabase` (`.claude\skills\supabase\SKILL.md`) : OBLIGATORIO cargarlo antes de cualquier tarea que toque Supabase. Reglas clave:
+  - No confiar en datos de entrenamiento; verificar contra changelog (`https://supabase.com/changelog.md`) y docs (preferir MCP `search_docs`, o añadir `.md` a cualquier URL de docs).
+  - Seguridad: RLS activado en todas las tablas expuestas; nunca usar `user_metadata` para autorización (usar `app_metadata`); `auth.role()` deprecado (usar `TO authenticated/anon`); `TO authenticated` solo no basta (añadir predicado de ownership con `auth.uid()`); políticas UPDATE necesitan `USING` + `WITH CHECK`; `SECURITY DEFINER` bypass RLS y es endpoint público — evitarlo, si es imprescindible en schema no expuesto con check de `auth.uid()`.
+  - Nunca exponer `service_role`/secret keys en cliente; usar publishable keys.
+  - Con SQL: iterar con `execute_sql` (MCP), NO con `apply_migration` (escribe historial de migración en cada llamada). Al commitear: correr advisors, revisar checklist de seguridad, generar migración con `supabase db pull <nombre> --local --yes` y verificar con `supabase migration list --local`.
+  - Debugging: ante errores de Supabase (REST/PostgREST/RLS/Auth/Realtime/Edge/Storage) primero leer `https://supabase.com/docs/guides/monitoring-and-debugging.md` antes de diagnosticar.
+  - Verificar siempre los cambios con una query de prueba; si un enfoque falla 2-3 veces, cambiar de método en vez de loopear.
 
 ## Agentes
 
