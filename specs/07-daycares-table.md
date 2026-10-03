@@ -1,6 +1,6 @@
 # Spec 07 — Tabla `daycares`
 
-**State:** Approved  
+**State:** Implemented
 **Depends on:** —  
 **Date:** 2026-10-02  
 **Objective:** Crear la tabla `daycares` como entidad raíz del sistema, aplicando el patrón de migraciones del proyecto, con RLS activado y políticas básicas de seguridad.
@@ -67,16 +67,16 @@
 
 ## Acceptance criteria
 
-- [ ] Existe archivo `migrations/001_create_daycares.sql`
-- [ ] Tabla `daycares` existe en Supabase
-- [ ] Columnas: `id` (uuid PK, default `gen_random_uuid()`), `name` (text), `created_at` (timestamptz, default `now()`)
-- [ ] RLS activado en la tabla
-- [ ] Política SELECT permite lectura a anon y authenticated
-- [ ] Política INSERT requiere authenticated
-- [ ] Política UPDATE tiene USING + WITH CHECK y requiere authenticated
-- [ ] Política DELETE requiere authenticated
-- [ ] Query de verificación confirma que la tabla y las 4 políticas existen
-- [ ] Advisors de seguridad sin alertas nuevas por esta tabla
+- [x] Existe archivo `migrations/001_create_daycares.sql`
+- [x] Tabla `daycares` existe en Supabase
+- [x] Columnas: `id` (uuid PK, default `gen_random_uuid()`), `name` (text), `created_at` (timestamptz, default `now()`)
+- [x] RLS activado en la tabla
+- [x] Política SELECT permite lectura a anon y authenticated
+- [x] Política INSERT requiere authenticated
+- [x] Política UPDATE tiene USING + WITH CHECK y requiere authenticated
+- [x] Política DELETE requiere authenticated
+- [x] Query de verificación confirma que la tabla y las 4 políticas existen
+- [x] Advisors de seguridad sin alertas nuevas por esta tabla
 
 ---
 
