@@ -14,6 +14,19 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Context7 utilizaremos este MCP para usar la documentación mas actualizada
 - Supabase : base de datos, RLS, Edge Functions, logs, advisors y cualquier operación contra la base de datos del proyecto.
 
+## Interaction con la base de datos (Supabase + Next.js)
+
+La app interactúa con la base de datos usando los paquetes propios de Supabase y Next.js:
+
+- **Paquetes** : `@supabase/supabase-js` y `@supabase/ssr` (instalados, pnpm).
+- **Clientes** (helpers en `src/utils/supabase/`):
+  - `server.ts` → `createClient(cookieStore)` para Server Components / Server Functions (con `await cookies()` de `next/headers`).
+  - `client.ts` → `createClient()` para Client Components (browser).
+  - `proxy.ts` → `updateSession(request)` para refrescar sesiones.
+- **Session refresh** : Next.js 16 renombró Middleware a Proxy — la lógica vive en `src/proxy.ts` (NO crear `middleware.ts`).
+- **Env vars** : `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en `.env.local`. Nunca exponer `service_role`/secret keys.
+- **Auth** : usar `supabase.auth.getUser()` / `getClaims()` en servidor; no confiar en datos de cliente.
+
 ## Skills
 
 - `supabase` (`.claude\skills\supabase\SKILL.md`) : OBLIGATORIO cargarlo antes de cualquier tarea que toque Supabase. Reglas clave:
