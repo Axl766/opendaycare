@@ -1,3 +1,11 @@
+export type UserRole = "staff" | "parent" | "admin";
+
+export const userRoleLabels: Record<UserRole, string> = {
+  staff: "Maestra",
+  parent: "Familia",
+  admin: "Admin",
+};
+
 export type LoginDefaults = {
   email: string;
 };

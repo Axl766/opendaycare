@@ -2,18 +2,27 @@ import type { Metadata } from "next";
 import { AddChildModal } from "@/components/AddChildModal";
 import { ChildrenBrowser } from "@/components/ChildrenBrowser";
 import { MobileTopBar } from "@/components/MobileTopBar";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar, getInitial, type SessionUser } from "@/components/Sidebar";
+import { userRoleLabels } from "@/data/auth";
+import { verifySession } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Niños · OpenDayCare",
 };
 
-export default function Page() {
+export default async function Page() {
+  const session = await verifySession();
+  const sessionUser: SessionUser = {
+    name: session.fullName,
+    roleLabel: userRoleLabels[session.role],
+    initial: getInitial(session.fullName),
+  };
+
   return (
     <>
-      <MobileTopBar activeNavId="kids" />
+      <MobileTopBar activeNavId="kids" sessionUser={sessionUser} />
       <div className="flex min-h-screen bg-[#F6ECDF]">
-        <Sidebar activeNavId="kids" />
+        <Sidebar activeNavId="kids" sessionUser={sessionUser} />
         <main className="flex-1 min-w-0 md:h-screen md:overflow-y-auto">
           <div className="max-w-[880px] w-full mx-auto pt-[34px] px-[40px] pb-[80px]">
             <div className="flex items-end justify-between gap-[16px] mb-[22px]">

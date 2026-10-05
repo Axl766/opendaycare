@@ -6,8 +6,10 @@ import { ChildInfoCard } from "@/components/ChildInfoCard";
 import { ChildProfileHeader } from "@/components/ChildProfileHeader";
 import { MobileTopBar } from "@/components/MobileTopBar";
 import { ParentsCard } from "@/components/ParentsCard";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar, getInitial, type SessionUser } from "@/components/Sidebar";
 import { children } from "@/data/children";
+import { userRoleLabels } from "@/data/auth";
+import { verifySession } from "@/lib/auth";
 
 export function generateStaticParams() {
   return children.map((child) => ({ childId: child.id }));
@@ -29,6 +31,12 @@ export default async function Page({
   params: Promise<{ childId: string }>;
 }) {
   const { childId } = await params;
+  const session = await verifySession();
+  const sessionUser: SessionUser = {
+    name: session.fullName,
+    roleLabel: userRoleLabels[session.role],
+    initial: getInitial(session.fullName),
+  };
   const child = children.find((item) => item.id === childId);
 
   if (!child) {
@@ -37,9 +45,9 @@ export default async function Page({
 
   return (
     <>
-      <MobileTopBar activeNavId="kids" />
+      <MobileTopBar activeNavId="kids" sessionUser={sessionUser} />
       <div className="flex min-h-screen bg-[#F6ECDF]">
-        <Sidebar activeNavId="kids" />
+        <Sidebar activeNavId="kids" sessionUser={sessionUser} />
         <main className="flex-1 min-w-0 md:h-screen md:overflow-y-auto">
           <div className="max-w-[820px] w-full mx-auto pt-[34px] px-[40px] pb-[80px]">
             <Link

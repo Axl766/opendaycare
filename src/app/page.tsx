@@ -2,13 +2,23 @@ import { CreatePostPrompt } from "@/components/CreatePostPrompt";
 import { FeedPosts } from "@/components/FeedPosts";
 import { MobileTopBar } from "@/components/MobileTopBar";
 import { Sidebar } from "@/components/Sidebar";
+import { userRoleLabels } from "@/data/auth";
+import { getInitial, type SessionUser } from "@/components/Sidebar";
+import { verifySession } from "@/lib/auth";
 
-export default function Page() {
+export default async function Page() {
+  const session = await verifySession();
+  const sessionUser: SessionUser = {
+    name: session.fullName,
+    roleLabel: userRoleLabels[session.role],
+    initial: getInitial(session.fullName),
+  };
+
   return (
     <>
-      <MobileTopBar activeNavId="feed" />
+      <MobileTopBar activeNavId="feed" sessionUser={sessionUser} />
       <div className="flex min-h-screen bg-[#F6ECDF]">
-        <Sidebar activeNavId="feed" />
+        <Sidebar activeNavId="feed" sessionUser={sessionUser} />
         <main className="flex-1 min-w-0 md:h-screen md:overflow-y-auto">
           <div className="max-w-[760px] w-full mx-auto pt-[34px] px-[40px] pb-[80px]">
             <div className="mb-[24px]">

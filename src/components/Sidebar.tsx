@@ -1,12 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { CreatePostModal } from "@/components/CreatePostModal";
-import {
-  currentUser,
-  navItems,
-  type NavIcon,
-  type NavItemId,
-} from "@/data/feed";
+import { logout } from "@/app/actions/auth";
+import { navItems, type NavIcon, type NavItemId } from "@/data/feed";
 
 const navIcons: Record<NavIcon, ReactNode> = {
   home: (
@@ -70,15 +66,36 @@ const navIcons: Record<NavIcon, ReactNode> = {
   ),
 };
 
-export function Sidebar({ activeNavId }: { activeNavId: NavItemId }) {
+export type SessionUser = {
+  name: string;
+  roleLabel: string;
+  initial: string;
+};
+
+export const getInitial = (name: string) =>
+  name.trim().charAt(0).toUpperCase();
+
+export function Sidebar({
+  activeNavId,
+  sessionUser,
+}: {
+  activeNavId: NavItemId;
+  sessionUser: SessionUser;
+}) {
   return (
     <aside className="w-[248px] flex-none bg-[#FFFDF9] border-r border-[#ECE0D0] hidden md:flex md:flex-col px-[16px] py-[24px] sticky top-0 h-screen">
-      <SidebarContent activeNavId={activeNavId} />
+      <SidebarContent activeNavId={activeNavId} sessionUser={sessionUser} />
     </aside>
   );
 }
 
-export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
+export function SidebarContent({
+  activeNavId,
+  sessionUser,
+}: {
+  activeNavId: NavItemId;
+  sessionUser: SessionUser;
+}) {
   return (
     <>
       <Link
@@ -130,32 +147,36 @@ export function SidebarContent({ activeNavId }: { activeNavId: NavItemId }) {
       <div className="border-t border-[#ECE0D0] pt-[14px] mt-[10px]">
         <div className="flex items-center gap-[11px] px-[8px] py-[6px]">
           <div className="w-[38px] h-[38px] rounded-full bg-[#F2937A] text-white font-display font-semibold text-[16px] flex items-center justify-center shrink-0">
-            {currentUser.initial}
+            {sessionUser.initial}
           </div>
           <div className="flex-1 min-w-0">
             <div className="font-extrabold text-[14px] text-[#3F362E]">
-              {currentUser.name}
+              {sessionUser.name}
             </div>
-            <div className="text-[12px] text-[#A89A8B]">{currentUser.role}</div>
+            <div className="text-[12px] text-[#A89A8B]">
+              {sessionUser.roleLabel}
+            </div>
           </div>
-          <Link
-            href="/login"
-            title="Cerrar sesión"
-            className="shrink-0 w-[32px] h-[32px] rounded-[10px] bg-[#F6ECDF] text-[#94887B] flex items-center justify-center"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <form action={logout}>
+            <button
+              type="submit"
+              title="Cerrar sesión"
+              className="shrink-0 w-[32px] h-[32px] rounded-[10px] bg-[#F6ECDF] text-[#94887B] flex items-center justify-center"
             >
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
-            </svg>
-          </Link>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </>
