@@ -1,6 +1,16 @@
-import type { ChildAllergy } from "@/data/children";
+import {
+  allergyLabelByValue,
+  allergyPillStyle,
+  type AllergyTag,
+} from "@/data/children";
 
-export function AllergyNotice({ allergy }: { allergy: ChildAllergy }) {
+export function AllergyNotice({
+  tags,
+  notes,
+}: {
+  tags: string[];
+  notes: string | null;
+}) {
   return (
     <div className="flex gap-[14px] bg-[#FBDAD6] rounded-[16px] px-[18px] py-[16px]">
       <div className="w-[40px] h-[40px] rounded-[11px] bg-[#F4A8A0] flex items-center justify-center shrink-0">
@@ -18,13 +28,31 @@ export function AllergyNotice({ allergy }: { allergy: ChildAllergy }) {
           <path d="M12 9v4M12 17h.01" />
         </svg>
       </div>
-      <div>
-        <div className="font-extrabold text-[#C5413A] text-[15px] mb-[2px]">
+      <div className="min-w-0">
+        <div className="font-extrabold text-[#C5413A] text-[15px] mb-[6px]">
           Alergias y notas
         </div>
-        <div className="text-[#B25249] text-[14.5px] leading-[1.5]">
-          {allergy.notes}
-        </div>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-[7px] mb-[8px]">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[11px] font-extrabold px-[9px] py-[4px] rounded-full"
+                style={{
+                  backgroundColor: allergyPillStyle.bg,
+                  color: allergyPillStyle.color,
+                }}
+              >
+                {allergyLabelByValue[tag as AllergyTag] ?? tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {notes && (
+          <div className="text-[#B25249] text-[14.5px] leading-[1.5]">
+            {notes}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { MobileTopBar } from "@/components/MobileTopBar";
 import { Sidebar, getInitial, type SessionUser } from "@/components/Sidebar";
 import { userRoleLabels } from "@/data/auth";
 import { verifySession } from "@/lib/auth";
+import { getChildren, getRooms } from "@/lib/children";
 
 export const metadata: Metadata = {
   title: "Niños · OpenDayCare",
@@ -17,6 +18,8 @@ export default async function Page() {
     roleLabel: userRoleLabels[session.role],
     initial: getInitial(session.fullName),
   };
+
+  const [rooms, children] = await Promise.all([getRooms(), getChildren()]);
 
   return (
     <>
@@ -34,10 +37,10 @@ export default async function Page() {
                   Niños
                 </h1>
               </div>
-              <AddChildModal />
+              <AddChildModal rooms={rooms} />
             </div>
 
-            <ChildrenBrowser />
+            <ChildrenBrowser children={children} rooms={rooms} />
           </div>
         </main>
       </div>

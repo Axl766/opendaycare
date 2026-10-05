@@ -1,17 +1,30 @@
 import Link from "next/link";
+import type { Child } from "@/lib/children";
 import {
-  allergyPillStyle,
+  calcAgeYears,
+  childAvatarStyle,
+  getChildInitial,
   unlinkedPill,
-  type Child,
+  allergyPillStyle,
+  allergyLabelByValue,
+  type AllergyTag,
 } from "@/data/children";
 
-function parentsSummary(child: Child): string {
-  if (child.parents.length === 0) return "sin padres vinculados";
-  if (child.parents.length === 1) return "1 padre vinculado";
-  return `${child.parents.length} padres vinculados`;
+function parentsSummary(parentCount: number): string {
+  if (parentCount === 0) return "sin padres vinculados";
+  if (parentCount === 1) return "1 padre vinculado";
+  return `${parentCount} padres vinculados`;
 }
 
-export function ChildCard({ child }: { child: Child }) {
+export function ChildCard({
+  child,
+}: {
+  child: Child & { parentCount: number };
+}) {
+  const age = calcAgeYears(child.birthDate);
+  const avatar = childAvatarStyle(child.fullName);
+  const firstAllergy = child.allergyTags[0];
+
   return (
     <Link
       href={`/kids/${child.id}`}
@@ -19,19 +32,19 @@ export function ChildCard({ child }: { child: Child }) {
     >
       <div
         className="w-[48px] h-[48px] rounded-full font-display font-semibold text-[19px] flex items-center justify-center shrink-0"
-        style={{ backgroundColor: child.avatarBg, color: child.avatarColor }}
+        style={{ backgroundColor: avatar.bg, color: avatar.color }}
       >
-        {child.initial}
+        {getChildInitial(child.fullName)}
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-display font-semibold text-[16px] text-[#3F362E]">
-          {child.name}
+          {child.fullName}
         </div>
         <div className="text-[13px] text-[#A89A8B]">
-          {child.ageYears} años · {parentsSummary(child)}
+          {age} años · {child.roomName} · {parentsSummary(child.parentCount)}
         </div>
       </div>
-      {child.allergy ? (
+      {firstAllergy ? (
         <span
           className="shrink-0 text-[11px] font-extrabold px-[9px] py-[5px] rounded-full"
           style={{
@@ -39,9 +52,9 @@ export function ChildCard({ child }: { child: Child }) {
             color: allergyPillStyle.color,
           }}
         >
-          {child.allergy.pill}
+          {allergyLabelByValue[firstAllergy as AllergyTag] ?? firstAllergy}
         </span>
-      ) : child.parents.length === 0 ? (
+      ) : child.parentCount === 0 ? (
         <span
           className="shrink-0 text-[11px] font-extrabold px-[9px] py-[5px] rounded-full"
           style={{ backgroundColor: unlinkedPill.bg, color: unlinkedPill.color }}
