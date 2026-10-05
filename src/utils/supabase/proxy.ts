@@ -36,7 +36,21 @@ export const updateSession = async (request: NextRequest) => {
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getClaims(). Do not run any other logic between these two.
   const { data } = await supabase.auth.getClaims();
-  void data?.claims;
+  const isAuthenticated = Boolean(data?.claims?.sub);
+
+  const pathname = request.nextUrl.pathname;
+  const publicRoutes = ["/login", "/activate-account"];
+  const isPublicRoute = publicRoutes.includes(pathname);
+
+  // No session on a protected route → redirect to /login
+  if (!isAuthenticated && !isPublicRoute) {
+    return NextResponse.redirect(new URL("/login", request.nextUrl));
+  }
+
+  // Active session on /login → redirect to home
+  if (isAuthenticated && pathname === "/login") {
+    return NextResponse.redirect(new URL("/", request.nextUrl));
+  }
 
   return supabaseResponse;
 };

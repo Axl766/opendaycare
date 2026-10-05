@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 import type { NavItemId } from "@/data/feed";
+import type { SessionUser } from "./Sidebar";
 import { SidebarContent } from "./Sidebar";
 
-export function MobileTopBar({ activeNavId }: { activeNavId: NavItemId }) {
+export function MobileTopBar({
+  activeNavId,
+  sessionUser,
+}: {
+  activeNavId: NavItemId;
+  sessionUser: SessionUser;
+}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -62,7 +69,7 @@ export function MobileTopBar({ activeNavId }: { activeNavId: NavItemId }) {
             onClick={() => setDrawerOpen(false)}
           />
           <aside className="absolute inset-y-0 left-0 w-[248px] bg-[#FFFDF9] border-r border-[#ECE0D0] flex flex-col px-[16px] py-[24px]">
-            <SidebarContent activeNavId={activeNavId} />
+            <SidebarContent activeNavId={activeNavId} sessionUser={sessionUser} />
           </aside>
         </div>
       )}
