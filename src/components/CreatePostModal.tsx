@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFeed } from "@/components/FeedProvider";
-import { children } from "@/data/children";
+import { feedRecipients as children } from "@/data/feed";
 import {
   postTypeLabel,
   postTypePill,

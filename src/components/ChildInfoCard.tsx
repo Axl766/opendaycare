@@ -1,10 +1,10 @@
-import type { Child } from "@/data/children";
+import type { Child } from "@/lib/children";
 
 export function ChildInfoCard({ child }: { child: Child }) {
   const rows = [
-    { label: "Fecha de nacimiento", value: child.birthDate },
-    { label: "Sala", value: child.room },
-    { label: "Ingreso", value: child.enrollment },
+    { label: "Fecha de nacimiento", value: formatFullDate(child.birthDate) },
+    { label: "Sala", value: child.roomName },
+    { label: "Ingreso", value: formatMonthYear(child.enrolledAt) },
   ];
 
   return (
@@ -20,4 +20,16 @@ export function ChildInfoCard({ child }: { child: Child }) {
       ))}
     </div>
   );
+}
+
+function formatFullDate(isoDate: string): string {
+  const date = new Date(`${isoDate}T00:00:00`);
+  const month = new Intl.DateTimeFormat("es-AR", { month: "short" }).format(date);
+  return `${String(date.getDate()).padStart(2, "0")} ${month} ${date.getFullYear()}`;
+}
+
+function formatMonthYear(isoDate: string): string {
+  const date = new Date(`${isoDate}T00:00:00`);
+  const month = new Intl.DateTimeFormat("es-AR", { month: "short" }).format(date);
+  return `${month} ${date.getFullYear()}`;
 }

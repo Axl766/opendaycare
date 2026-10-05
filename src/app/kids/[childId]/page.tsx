@@ -2,18 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AllergyNotice } from "@/components/AllergyNotice";
+import { ArchiveChildButton } from "@/components/ArchiveChildButton";
 import { ChildInfoCard } from "@/components/ChildInfoCard";
 import { ChildProfileHeader } from "@/components/ChildProfileHeader";
+import { EditChildModal } from "@/components/EditChildModal";
 import { MobileTopBar } from "@/components/MobileTopBar";
 import { ParentsCard } from "@/components/ParentsCard";
 import { Sidebar, getInitial, type SessionUser } from "@/components/Sidebar";
-import { children } from "@/data/children";
 import { userRoleLabels } from "@/data/auth";
 import { verifySession } from "@/lib/auth";
-
-export function generateStaticParams() {
-  return children.map((child) => ({ childId: child.id }));
-}
+import { getChildById, getRooms } from "@/lib/children";
 
 export async function generateMetadata({
   params,
@@ -21,8 +19,10 @@ export async function generateMetadata({
   params: Promise<{ childId: string }>;
 }): Promise<Metadata> {
   const { childId } = await params;
-  const child = children.find((item) => item.id === childId);
-  return { title: child ? `${child.name} · OpenDayCare` : "OpenDayCare" };
+  const child = await getChildById(childId);
+  return {
+    title: child ? `${child.fullName} · OpenDayCare` : "OpenDayCare",
+  };
 }
 
 export default async function Page({
@@ -37,11 +37,13 @@ export default async function Page({
     roleLabel: userRoleLabels[session.role],
     initial: getInitial(session.fullName),
   };
-  const child = children.find((item) => item.id === childId);
+  const child = await getChildById(childId);
 
   if (!child) {
     notFound();
   }
+
+  const rooms = await getRooms();
 
   return (
     <>
@@ -71,8 +73,16 @@ export default async function Page({
 
             <div className="flex flex-col md:flex-row md:items-start gap-[26px]">
               <div className="flex-1 min-w-0 md:min-w-[300px] flex flex-col gap-[18px]">
-                <ChildProfileHeader child={child} />
-                {child.allergy && <AllergyNotice allergy={child.allergy} />}
+                <div className="flex items-center gap-[16px] flex-wrap">
+                  <ChildProfileHeader child={child} />
+                  <EditChildModal child={child} rooms={rooms} />
+                </div>
+                {(child.allergyTags.length > 0 || child.medicalNotes) && (
+                  <AllergyNotice
+                    tags={child.allergyTags}
+                    notes={child.medicalNotes}
+                  />
+                )}
                 <ChildInfoCard child={child} />
               </div>
 
@@ -96,7 +106,11 @@ export default async function Page({
                   </svg>
                   Resumen del día
                 </Link>
-                <ParentsCard parents={child.parents} childName={child.name} />
+                <ParentsCard childName={child.fullName} />
+                <ArchiveChildButton
+                  childId={child.id}
+                  childName={child.fullName}
+                />
               </div>
             </div>
           </div>

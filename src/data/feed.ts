@@ -101,6 +101,21 @@ export const currentUser = {
   initial: "C",
 };
 
+// Datos temporales para el modal de crear publicación del feed.
+// TODO(spec futuro — feed): reemplazar por niños reales desde la BD.
+const feedRecipientsSource = [
+  { id: "mock-1", name: "Mateo Fernández", initial: "M", avatarBg: "#A9D9E8", avatarColor: "#1F7A93" },
+  { id: "mock-2", name: "Sofía Méndez", initial: "S", avatarBg: "#F4B8CC", avatarColor: "#C44A7A" },
+  { id: "mock-3", name: "Benjamín Ruiz", initial: "B", avatarBg: "#B9DEC4", avatarColor: "#3E8B62" },
+  { id: "mock-4", name: "Valentina Soto", initial: "V", avatarBg: "#F4DC8E", avatarColor: "#9A7B1E" },
+  { id: "mock-5", name: "Tomás Díaz", initial: "T", avatarBg: "#C9B6E8", avatarColor: "#7B5FC0" },
+  { id: "mock-6", name: "Emma Castro", initial: "E", avatarBg: "#F4B8CC", avatarColor: "#C44A7A" },
+  { id: "mock-7", name: "Lucas Romero", initial: "L", avatarBg: "#A9D9E8", avatarColor: "#1F7A93" },
+  { id: "mock-8", name: "Olivia Vega", initial: "O", avatarBg: "#B9DEC4", avatarColor: "#3E8B62" },
+];
+
+export const feedRecipients = feedRecipientsSource;
+
 export type NavIcon = "home" | "kids" | "bell" | "user";
 
 export type NavItemId = "feed" | "kids" | "notices" | "account";
