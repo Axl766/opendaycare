@@ -2,13 +2,20 @@
 
 import { useState } from "react";
 
-export function ConsentCheckbox({ text }: { text: string }) {
+export function ConsentCheckbox({
+  text,
+  name,
+}: {
+  text: string;
+  name?: string;
+}) {
   const [checked, setChecked] = useState(true);
 
   return (
     <label className="flex items-start gap-[12px] bg-[#FBF1D6] rounded-[14px] px-[16px] py-[14px] mb-[24px] cursor-pointer">
       <input
         type="checkbox"
+        name={name}
         checked={checked}
         onChange={() => setChecked((prev) => !prev)}
         className="sr-only"
