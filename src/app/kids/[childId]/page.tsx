@@ -106,7 +106,7 @@ export default async function Page({
                   </svg>
                   Resumen del día
                 </Link>
-                <ParentsCard childName={child.fullName} />
+                <ParentsCard childId={child.id} childName={child.fullName} />
                 <ArchiveChildButton
                   childId={child.id}
                   childName={child.fullName}

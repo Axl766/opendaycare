@@ -1,6 +1,6 @@
 # SPEC 11 — Flujo real de invitación a padres (correo + activación + vinculación)
 
-> **State:** Draft
+> **State:** approved
 > **Depends on:** SPEC 05 (modal visual vincular padre), SPEC 09 (autenticación real), SPEC 10 (CRUD niños, tablas `rooms` y `children`)
 > **Date:** 2026-10-04
 > **Objective:** Conectar el modal de vincular padre al flujo completo: generar código de invitación, enviar correo con Resend, y permitir al padre registrarse en `/activate-account` con ese código para crear la vinculación persistente `parent_children`.
@@ -151,15 +151,15 @@ Políticas RLS: SELECT / INSERT / UPDATE para authenticated.
 
 ## Risks
 
-| Riesgo                                                                                                      | Mitigación                                                                                                                    |
-| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Riesgo                                                                                                      | Mitigación                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Resend requiere API key válida y configuración de dominio remitente                                         | El usuario debe obtener key de resend.com. En sandbox, el correo solo se envía a emails verificados. Para producción, verificar dominio. |
-| El trigger `AFTER INSERT ON auth.users` puede fallar si `raw_user_meta_data` no tiene los campos requeridos | Manejar error en el trigger (log + rollback). Verificar que `signUp()` pasa todos los campos requeridos.                       |
-| Si el padre ya tiene cuenta y el staff intenta vincularlo de nuevo, puede haber conflicto                    | Server Action detecta email existente y hace vinculación directa. Si ya está vinculado al niño, retorna error claro.           |
-| El código de invitación puede ser adivinado si es predecible                                                | Generar código aleatorio criptográficamente seguro (crypto.randomBytes). 5 caracteres alfanuméricos = 60^5 combinaciones, suficiente. |
-| La página `/activate-account` puede recibir código inválido o expirado                                      | Mostrar mensaje de error amigable (no formulario). Sugerir contactar al staff para nueva invitación.                          |
-| Migraciones aplicadas a Supabase sin entorno local pueden ser difíciles de revertir                         | Cada migración es idempotente por diseño; si falla, se corrige con nuevas migraciones. Verificar con queries antes de avanzar. |
-| `resend` es paquete externo; puede tener breaking changes                                                   | Fijar versión en `package.json`. Leer changelog antes de actualizar.                                                          |
+| El trigger `AFTER INSERT ON auth.users` puede fallar si `raw_user_meta_data` no tiene los campos requeridos | Manejar error en el trigger (log + rollback). Verificar que `signUp()` pasa todos los campos requeridos.                                 |
+| Si el padre ya tiene cuenta y el staff intenta vincularlo de nuevo, puede haber conflicto                   | Server Action detecta email existente y hace vinculación directa. Si ya está vinculado al niño, retorna error claro.                     |
+| El código de invitación puede ser adivinado si es predecible                                                | Generar código aleatorio criptográficamente seguro (crypto.randomBytes). 5 caracteres alfanuméricos = 60^5 combinaciones, suficiente.    |
+| La página `/activate-account` puede recibir código inválido o expirado                                      | Mostrar mensaje de error amigable (no formulario). Sugerir contactar al staff para nueva invitación.                                     |
+| Migraciones aplicadas a Supabase sin entorno local pueden ser difíciles de revertir                         | Cada migración es idempotente por diseño; si falla, se corrige con nuevas migraciones. Verificar con queries antes de avanzar.           |
+| `resend` es paquete externo; puede tener breaking changes                                                   | Fijar versión en `package.json`. Leer changelog antes de actualizar.                                                                     |
 
 ---
 

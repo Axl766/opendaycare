@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { sendInvitation } from "@/app/actions/invitations";
 import type { LinkedParent, ParentRole } from "@/data/children";
 
-const invitationCode = "7K4P9";
-const invitationExpiryNote = "Vence en 7 días";
 const calloutIntro =
   "Le enviaremos un correo con un código para que active su cuenta.";
 
@@ -14,67 +13,60 @@ const relationshipOptions: { value: ParentRole; label: string }[] = [
   { value: "tutor", label: "Tutor/a" },
 ];
 
+const emptyForm = { name: "", email: "" };
+
 export function LinkParentModal({
+  childId,
   childName,
   onInvite,
 }: {
+  childId: string;
   childName: string;
-  onInvite: (parent: LinkedParent) => void;
+  onInvite?: (parent: LinkedParent) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState(emptyForm);
   const [relationship, setRelationship] = useState<ParentRole>("mom");
-  const [errors, setErrors] = useState({ name: "", email: "" });
+  const [result, setResult] = useState<{
+    error?: string;
+    successEmail?: string;
+  } | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
 
   const childFirstName = childName.split(" ")[0];
+  const successEmail = open ? result?.successEmail ?? null : null;
 
   function closeModal() {
     setOpen(false);
-    setForm({ name: "", email: "" });
+    setForm(emptyForm);
     setRelationship("mom");
-    setErrors({ name: "", email: "" });
+    setResult(null);
   }
 
-  function handleNameChange(value: string) {
-    setForm((prev) => ({ ...prev, name: value }));
-    setErrors((prev) => ({ ...prev, name: "" }));
-  }
+  function handleFormAction(formData: FormData) {
+    startTransition(async () => {
+      const response = await sendInvitation(null, formData);
+      setResult(response);
 
-  function handleEmailChange(value: string) {
-    setForm((prev) => ({ ...prev, email: value }));
-    setErrors((prev) => ({ ...prev, email: "" }));
-  }
+      if (response?.successEmail) {
+        onInvite?.({
+          name: response.fullName ?? "",
+          initial: (response.fullName ?? "").charAt(0).toUpperCase(),
+          avatarBg: "#A9C7E8",
+          role: response.relationship ?? "mom",
+          status: "pending",
+        });
 
-  function handleInvite() {
-    const name = form.name.trim();
-    const email = form.email.trim();
-    const nextErrors = {
-      name: name ? "" : "Ingresá el nombre del padre o madre.",
-      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        ? ""
-        : "Ingresá un correo válido.",
-    };
-    setErrors(nextErrors);
-    if (nextErrors.name) {
-      nameInputRef.current?.focus();
-      return;
-    }
-    if (nextErrors.email) {
-      emailInputRef.current?.focus();
-      return;
-    }
-    onInvite({
-      name,
-      initial: name.charAt(0).toUpperCase(),
-      avatarBg: "#A9C7E8",
-      role: relationship,
-      status: "pending",
+        setTimeout(() => {
+          setOpen(false);
+          setForm(emptyForm);
+          setRelationship("mom");
+          setResult(null);
+        }, 3000);
+      }
     });
-    closeModal();
   }
 
   useEffect(() => {
@@ -167,154 +159,169 @@ export function LinkParentModal({
                     </svg>
                   </button>
                 </div>
-                <div className="px-[26px] py-[22px]">
-                  <div className="flex gap-[11px] bg-[#E3ECFB] rounded-[14px] px-[16px] py-[13px] mb-[20px]">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#4E72C8"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="flex-none mt-[1px]"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 16v-4M12 8h.01" />
-                    </svg>
-                    <span className="text-[13.5px] text-[#3F5694] leading-[1.45]">
-                      {calloutIntro} Solo verá el feed de {childFirstName}.
-                    </span>
-                  </div>
 
-                  <label
-                    htmlFor="parent-name"
-                    className="block text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[8px]"
-                  >
-                    NOMBRE DEL PADRE/MADRE
-                  </label>
-                  <input
-                    id="parent-name"
-                    ref={nameInputRef}
-                    placeholder="Ej. Diego Fernández"
-                    value={form.name}
-                    onChange={(event) => handleNameChange(event.target.value)}
-                    aria-invalid={Boolean(errors.name)}
-                    aria-describedby={
-                      errors.name ? "parent-name-error" : undefined
-                    }
-                    className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
-                      errors.name
-                        ? "border-[#D9583C] mb-[8px]"
-                        : "border-[#EADFD0] mb-[18px]"
-                    }`}
-                  />
-                  {errors.name && (
-                    <p
-                      id="parent-name-error"
-                      role="alert"
-                      className="text-[12px] font-bold text-[#D9583C] mb-[18px]"
-                    >
-                      {errors.name}
+                {successEmail ? (
+                  <div className="px-[26px] py-[34px] text-center">
+                    <div className="w-[58px] h-[58px] rounded-full bg-[#5FB97E] mx-auto flex items-center justify-center mb-[18px]">
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#fff"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div className="font-display font-semibold text-[19px] text-[#3F362E] mb-[8px]">
+                      ¡Invitación enviada!
+                    </div>
+                    <p className="text-[14.5px] text-[#8A7C6D] leading-[1.55]">
+                      Invitación enviada a {successEmail}. Vence en 7 días.
                     </p>
-                  )}
-
-                  <label
-                    htmlFor="parent-email"
-                    className="block text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[8px]"
+                  </div>
+                ) : (
+                  <form
+                    action={handleFormAction}
+                    className="px-[26px] py-[22px]"
                   >
-                    EMAIL
-                  </label>
-                  <input
-                    id="parent-email"
-                    ref={emailInputRef}
-                    type="email"
-                    placeholder="correo@ejemplo.com"
-                    value={form.email}
-                    onChange={(event) => handleEmailChange(event.target.value)}
-                    aria-invalid={Boolean(errors.email)}
-                    aria-describedby={
-                      errors.email ? "parent-email-error" : undefined
-                    }
-                    className={`w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none ${
-                      errors.email
-                        ? "border-[#D9583C] mb-[8px]"
-                        : "border-[#EADFD0] mb-[18px]"
-                    }`}
-                  />
-                  {errors.email && (
-                    <p
-                      id="parent-email-error"
-                      role="alert"
-                      className="text-[12px] font-bold text-[#D9583C] mb-[18px]"
+                    <input type="hidden" name="childId" value={childId} />
+                    <input
+                      type="hidden"
+                      name="relationship"
+                      value={relationship}
+                    />
+
+                    <div className="flex gap-[11px] bg-[#E3ECFB] rounded-[14px] px-[16px] py-[13px] mb-[20px]">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#4E72C8"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="flex-none mt-[1px]"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
+                      </svg>
+                      <span className="text-[13.5px] text-[#3F5694] leading-[1.45]">
+                        {calloutIntro} Solo verá el feed de {childFirstName}.
+                      </span>
+                    </div>
+
+                    <label
+                      htmlFor="parent-name"
+                      className="block text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[8px]"
                     >
-                      {errors.email}
+                      NOMBRE DEL PADRE/MADRE
+                    </label>
+                    <input
+                      id="parent-name"
+                      name="fullName"
+                      value={form.name}
+                      onChange={(event) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          name: event.target.value,
+                        }))
+                      }
+                      placeholder="Ej. Diego Fernández"
+                      required
+                      className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none mb-[18px]"
+                    />
+
+                    <label
+                      htmlFor="parent-email"
+                      className="block text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[8px]"
+                    >
+                      EMAIL
+                    </label>
+                    <input
+                      id="parent-email"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={(event) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          email: event.target.value,
+                        }))
+                      }
+                      placeholder="correo@ejemplo.com"
+                      required
+                      className="w-full px-[16px] py-[13px] rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-[15px] text-[#3F362E] placeholder:text-[#B6A99B] focus:outline-none mb-[18px]"
+                    />
+
+                    <div className="text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[10px]">
+                      PARENTESCO
+                    </div>
+                    <div
+                      role="radiogroup"
+                      aria-label="Parentesco"
+                      className="flex gap-[9px] mb-[20px]"
+                    >
+                      {relationshipOptions.map((option) => {
+                        const selected = relationship === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            role="radio"
+                            aria-checked={selected}
+                            onClick={() => setRelationship(option.value)}
+                            className={`flex-1 py-[11px] rounded-full border-[1.5px] font-extrabold text-[14px] ${
+                              selected
+                                ? "border-[#9FB8EC] bg-[#CCD8F4] text-[#4E72C8]"
+                                : "border-[#ECE0D0] bg-[#FFFDF9] text-[#6E6359]"
+                            }`}
+                          >
+                            {option.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {result?.error && (
+                      <p
+                        role="alert"
+                        className="text-[13px] font-bold text-[#C5503A] bg-[#FDEDE8] border-[1.5px] border-[#F2A78E] rounded-[12px] px-[14px] py-[10px] mb-[16px]"
+                      >
+                        {result.error}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="flex items-center justify-center gap-[9px] w-full py-[14px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[15.5px] shadow-[0_10px_22px_-8px_rgba(238,129,100,.7)] disabled:opacity-60"
+                    >
+                      <svg
+                        width="19"
+                        height="19"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#fff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="m22 2-7 20-4-9-9-4z" />
+                        <path d="M22 2 11 13" />
+                      </svg>
+                      {isPending ? "Enviando…" : "Enviar invitación"}
+                    </button>
+
+                    <p className="text-center text-[12.5px] text-[#A89A8B] mt-[14px]">
+                      El código de activación va por correo. Vence en 7 días.
                     </p>
-                  )}
-
-                  <div className="text-[12px] font-extrabold tracking-[.7px] text-[#94887B] mb-[10px]">
-                    PARENTESCO
-                  </div>
-                  <div
-                    role="radiogroup"
-                    aria-label="Parentesco"
-                    className="flex gap-[9px] mb-[20px]"
-                  >
-                    {relationshipOptions.map((option) => {
-                      const selected = relationship === option.value;
-                      return (
-                        <button
-                          key={option.value}
-                          type="button"
-                          role="radio"
-                          aria-checked={selected}
-                          onClick={() => setRelationship(option.value)}
-                          className={`flex-1 py-[11px] rounded-full border-[1.5px] font-extrabold text-[14px] ${
-                            selected
-                              ? "border-[#9FB8EC] bg-[#CCD8F4] text-[#4E72C8]"
-                              : "border-[#ECE0D0] bg-[#FFFDF9] text-[#6E6359]"
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="bg-[#FBF1D6] border-[1.5px] border-dashed border-[#E6D08A] rounded-[16px] py-[18px] text-center mb-[20px]">
-                    <div className="text-[12px] font-extrabold tracking-[.7px] text-[#A88526] mb-[8px]">
-                      CÓDIGO DE INVITACIÓN
-                    </div>
-                    <div className="font-display font-semibold text-[34px] tracking-[7px] text-[#8A7234]">
-                      {invitationCode}
-                    </div>
-                    <div className="text-[13px] text-[#A88526] mt-[6px]">
-                      {invitationExpiryNote}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleInvite}
-                    className="flex items-center justify-center gap-[9px] w-full py-[14px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[15.5px] shadow-[0_10px_22px_-8px_rgba(238,129,100,.7)]"
-                  >
-                    <svg
-                      width="19"
-                      height="19"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#fff"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="m22 2-7 20-4-9-9-4z" />
-                      <path d="M22 2 11 13" />
-                    </svg>
-                    Enviar invitación
-                  </button>
-                </div>
+                  </form>
+                )}
               </div>
             </div>
           </div>

@@ -8,7 +8,13 @@ import {
   type LinkedParent,
 } from "@/data/children";
 
-export function ParentsCard({ childName }: { childName: string }) {
+export function ParentsCard({
+  childId,
+  childName,
+}: {
+  childId: string;
+  childName: string;
+}) {
   const [parentList, setParentList] = useState<LinkedParent[]>([]);
 
   function handleInviteParent(parent: LinkedParent) {
@@ -72,6 +78,7 @@ export function ParentsCard({ childName }: { childName: string }) {
           })
         )}
         <LinkParentModal
+          childId={childId}
           childName={childName}
           onInvite={handleInviteParent}
         />
